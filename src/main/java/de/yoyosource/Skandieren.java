@@ -2,6 +2,7 @@ package de.yoyosource;
 
 import de.yoyosource.rules.Rule;
 import de.yoyosource.symbols.Symbol;
+import de.yoyosource.symbols.TypedSymbol;
 import yapion.exceptions.parser.YAPIONParserException;
 import yapion.hierarchy.output.FileGZIPOutput;
 import yapion.hierarchy.output.Indentator;
@@ -32,9 +33,11 @@ public class Skandieren {
                 LengthOutput lengthOutput = new LengthOutput();
                 lengthOutput.setIndentator(Indentator.QUAD_SPACE);
                 // System.out.println(yapionObject.toYAPION(lengthOutput).getPrettifiedLength() + " " + lengthOutput.getLength() + " " + file.length());
-                // List<Symbol> symbolList = Symbol.toSymbols("In nova fert animus mutatas dicere formas", scanRule);
-                List<Symbol> symbolList = Symbol.toSymbols("aspirate meis primaque ab origine mundi", scanRule);
-                Rule.apply(symbolList, scanRule);
+                List<Symbol> symbolList = Symbol.toSymbols("In nova fert animus mutatas dicere formas", scanRule);
+                // List<Symbol> symbolList = Symbol.toSymbols("aspirate meis primaque ab origine mundi", scanRule);
+                Rule.apply(symbolList, scanRule).forEach(symbols -> {
+                    TypedSymbol.create(symbols, scanRule);
+                });
             } catch (YAPIONParserException e) {
                 System.out.println("INVALID INPUT");
             }

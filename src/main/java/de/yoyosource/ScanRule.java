@@ -10,17 +10,14 @@ import yapion.hierarchy.types.YAPIONArray;
 import yapion.hierarchy.types.YAPIONObject;
 import yapion.hierarchy.types.YAPIONValue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 @Getter
 public class ScanRule {
 
-    private List<List<Type>> innerTypes = new ArrayList<>();
-    private List<List<Type>> endTypes = new ArrayList<>();
+    private Set<List<Type>> innerTypes = new HashSet<>();
+    private Set<List<Type>> endTypes = new HashSet<>();
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
     private List<Rule> alwaysRules = new ArrayList<>();
     private List<Rule> sometimesRules = new ArrayList<>();
