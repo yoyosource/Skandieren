@@ -14,39 +14,32 @@
         special(.,"-?!:;\(\))
         space( \t)
     }
-    rules[
-        {
-            always[
-                {char(q)(retain)},
-                {char(u)(removed)}
-            ]
-        },
-        {
-            always[
-                {char(p)(retain)},
-                {char(h)(removed)}
-            ]
-        },
-        {
-            always[
-                {char(e)(removed)},
-                {space()(removed)},
-                {vocal()(retain)}
-            ]
-        },
-        {
-            always[
-                {char(e)(retain)},
-                {char(s)(removed)},
-                {char(t)(retain)}
-            ]
-        },
-        {
-            always[
-                {vocal()(long)}
-                {non_vocal()(retain)}
-                {non_vocal()(retain)}
-            ]
-        }
+    rules-always[
+        [
+            {char(q)(retain)},
+            {char(u)(removed)}
+        ]
+        [
+            {char(p)(retain)},
+            {char(h)(removed)}
+        ],
+        [
+            {char(e)(removed)},
+            {space()(removed)},
+            {vocal()(retain)}
+        ],
+        [
+            {char(e)(retain)},
+            {char(s)(removed)},
+            {char(t)(retain)}
+        ],
+        [
+            {vocal()(long)}
+            {non_vocal()(retain)}
+            {non_vocal()(retain)}
+        ]
+    ]
+    rules-sometimes[
+
     ]
 }
