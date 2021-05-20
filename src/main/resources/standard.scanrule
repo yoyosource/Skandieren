@@ -16,27 +16,27 @@
     }
     rules-always[
         [
-            {char(q)(retain)},
-            {char(u)(removed)}
+            q > retain,
+            u > removed,
         ]
         [
-            {char(p)(retain)},
-            {char(h)(removed)}
+            p > retain,
+            h > removed,
         ],
         [
-            {char(e)(removed)},
-            {space()(removed)},
-            {vocal()(retain)}
+            e > removed,
+            space > removed,
+            vocal > retain,
         ],
         [
-            {char(e)(retain)},
-            {char(s)(removed)},
-            {char(t)(retain)}
+            e > retain,
+            s > removed,
+            t > retain,
         ],
         [
-            {vocal()(long)}
-            {non_vocal()(retain)}
-            {non_vocal()(retain)}
+            vocal > long,
+            non_vocal > retain,
+            non_coval > retain,
         ]
     ]
     rules-sometimes[
