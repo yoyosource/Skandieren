@@ -33,8 +33,8 @@ public class Skandieren {
                 LengthOutput lengthOutput = new LengthOutput();
                 lengthOutput.setIndentator(Indentator.QUAD_SPACE);
                 // System.out.println(yapionObject.toYAPION(lengthOutput).getPrettifiedLength() + " " + lengthOutput.getLength() + " " + file.length());
-                List<Symbol> symbolList = Symbol.toSymbols("In nova fert animus mutatas dicere formas", scanRule);
-                // List<Symbol> symbolList = Symbol.toSymbols("aspirate meis primaque ab origine mundi", scanRule);
+                // List<Symbol> symbolList = Symbol.toSymbols("In nova fert animus mutatas dicere formas", scanRule);
+                List<Symbol> symbolList = Symbol.toSymbols("aspirate meis primaque ab origine mundi", scanRule);
                 Rule.apply(symbolList, scanRule).forEach(symbols -> {
                     TypedSymbol.create(symbols, scanRule);
                 });

@@ -2,6 +2,7 @@ package de.yoyosource.rules;
 
 import de.yoyosource.ScanRule;
 import de.yoyosource.symbols.Symbol;
+import de.yoyosource.symbols.SymbolModifier;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -43,21 +44,34 @@ public class Rule {
     }
 
     private boolean test(List<Symbol> symbols, int index) {
-        for (int i = 0; i < ruleComponents.length; i++) {
+        int i = 0;
+        while (i < ruleComponents.length) {
             int access = i + index;
             if (access >= symbols.size()) {
                 return false;
             }
+            if (symbols.get(access).is(SymbolModifier.REMOVED)) {
+                i++;
+                continue;
+            }
             if (!ruleComponents[i].getCheckPredicate().test(symbols.get(access))) {
                 return false;
             }
+            i++;
         }
         return true;
     }
 
     private void set(List<Symbol> symbols, int index) {
-        for (int i = 0; i < ruleComponents.length; i++) {
-            symbols.get(i + index).add(ruleComponents[i].getResult());
+        int i = 0;
+        while (i < ruleComponents.length) {
+            int access = i + index;
+            if (symbols.get(access).is(SymbolModifier.REMOVED)) {
+                i++;
+                continue;
+            }
+            symbols.get(access).add(ruleComponents[i].getResult());
+            i++;
         }
     }
 
