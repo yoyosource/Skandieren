@@ -17,7 +17,7 @@ public class Rule {
 
     public List<List<Symbol>> applySometimes(List<Symbol> symbolList) {
         List<List<Symbol>> lists = new ArrayList<>();
-        lists.add(symbolList);
+        lists.add(Symbol.copy(symbolList));
         for (int i = 0; i < symbolList.size(); i++) {
             List<List<Symbol>> toAdd = new ArrayList<>();
             for (List<Symbol> symbols : lists) {

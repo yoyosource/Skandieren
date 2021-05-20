@@ -41,11 +41,10 @@ public class Symbol {
 
     @Override
     public String toString() {
-        StringBuilder st = new StringBuilder().append("Symbol{'").append(c).append("':'");
-        for (SymbolModifier value : SymbolModifier.values()) {
-            st.append(is(value) ? value.printChar : ' ');
-        }
-        return st.append("'}").toString();
+        StringBuilder st = new StringBuilder().append(c).append(":");
+        st.append(is(SymbolModifier.REMOVED) ? SymbolModifier.REMOVED.printChar : ' ');
+        st.append(is(SymbolModifier.LONG) ? SymbolModifier.LONG.printChar : ' ');
+        return st.toString();
     }
 
     public static List<Symbol> copy(List<Symbol> list) {

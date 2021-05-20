@@ -43,7 +43,7 @@ public class ScanRule {
                 // Ignored
             }
         });
-        System.out.println(innerTypes + " " + endTypes);
+        // System.out.println(innerTypes + " " + endTypes);
 
         YAPIONObject symbolsObject = yapionObject.getObject("symbols");
         symbolsObject.forEach((s, yapionAnyType) -> {
@@ -55,15 +55,15 @@ public class ScanRule {
                 // Ignored
             }
         });
-        System.out.println(symbolsChecker);
+        // System.out.println(symbolsChecker);
 
         YAPIONArray rulesAlwaysObject = yapionObject.getArray("rules-always");
         createRules(rulesAlwaysObject, alwaysRules);
-        System.out.println(alwaysRules);
+        // System.out.println(alwaysRules);
 
         YAPIONArray rulesSometimesObject = yapionObject.getArray("rules-sometimes");
         createRules(rulesSometimesObject, sometimesRules);
-        System.out.println(sometimesRules);
+        // System.out.println(sometimesRules);
     }
 
     private void createRules(YAPIONArray yapionArray, List<Rule> rules) {
