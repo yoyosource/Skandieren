@@ -5,8 +5,10 @@ public enum SymbolModifier {
     REMOVED,
     LONG,
 
-    DIPHTHONG,
+    // DIPHTHONG,
 
+    SPACE,
+    SPECIAL,
     VOCAL,
     NON_VOCAL,
     MUTA,

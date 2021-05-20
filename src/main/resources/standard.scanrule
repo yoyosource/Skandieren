@@ -6,8 +6,14 @@
     types-end[
         LE,
     ]
-    muta(bptdgc)
-    liquida(lrs)
+    symbols{
+        muta(bptdgc)
+        liquida(lrs)
+        vocal(aeiouy)
+        non_vocal(bcdfghjklmnpqrstvwxyz)
+        special(.,"-?!:;\(\))
+        space( \t)
+    }
     rules[
         {
             always[
@@ -38,8 +44,8 @@
         {
             always[
                 {vocal()(long)}
-                {non-vocal()(retain)}
-                {non-vocal()(retain)}
+                {non_vocal()(retain)}
+                {non_vocal()(retain)}
             ]
         }
     ]
