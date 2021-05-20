@@ -22,11 +22,6 @@
             h > removed,
         ],
         [
-            e > removed,
-            space > removed,
-            vocal > retain,
-        ],
-        [
             e > retain,
             s > removed,
             t > retain,
@@ -126,6 +121,11 @@
             non-vocal > retain,
             h > removed,
             vocal > retain,
-        ]
+        ],
+        [
+            e > removed,
+            space > removed,
+            vocal > retain,
+        ],
     ]
 }
