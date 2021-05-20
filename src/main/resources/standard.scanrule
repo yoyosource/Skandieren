@@ -1,11 +1,13 @@
 {
-    types-middle[
-        LKK,
-        LL,
-    ]
-    types-end[
-        LE,
-    ]
+    types{
+        middle[
+            LKK,
+            LL,
+        ]
+        end[
+            LE,
+        ]
+    }
     symbols{
         muta(bptdgc)
         liquida(lrs)
@@ -36,10 +38,98 @@
         [
             vocal > long,
             non_vocal > retain,
-            non_coval > retain,
+            non_vocal > retain,
         ]
     ]
     rules-sometimes[
-
+        [
+            vocal > long,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            v > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > retain,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            m > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > retain,
+            space > removed,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            special > retain,
+            space > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > retain,
+            special > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            special > retain,
+            space > removed,
+            m > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            special > retain,
+            space > removed,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            special > retain,
+            m > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            special > retain,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            u > long,
+            m > retain,
+            space > removed,
+            e > removed,
+            s > retain,
+            t > retain,
+        ],
+        [
+            vocal > long,
+            liquida > retain,
+            muta > retain,
+        ],
+        [
+            non-vocal > retain,
+            h > removed,
+            vocal > retain,
+        ]
     ]
 }
