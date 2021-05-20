@@ -44,8 +44,8 @@ public class ScanRule {
         symbolsObject.forEach((s, yapionAnyType) -> {
             try {
                 SymbolModifier symbolModifier = SymbolModifier.valueOf(s.toUpperCase());
-                String type = ((YAPIONValue<String>) yapionAnyType).get();
-                symbolsChecker.put(symbolModifier, character -> type.contains(character + ""));
+                String type = ((YAPIONValue<String>) yapionAnyType).get().toLowerCase();
+                symbolsChecker.put(symbolModifier, character -> type.contains(Character.toLowerCase(character) + ""));
             } catch (IllegalArgumentException e) {
                 // Ignored
             }
