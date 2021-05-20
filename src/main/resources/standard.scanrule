@@ -1,13 +1,9 @@
 {
-    types{
-        middle[
-            LKK,
-            LL,
-        ]
-        end[
-            LE,
-        ]
-    }
+    types[
+        LKK,
+        LL,
+        LE,
+    ]
     symbols{
         muta(bptdgc)
         liquida(lrs)
@@ -20,7 +16,7 @@
         [
             q > retain,
             u > removed,
-        ]
+        ],
         [
             p > retain,
             h > removed,

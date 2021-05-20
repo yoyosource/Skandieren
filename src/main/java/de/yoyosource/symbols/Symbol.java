@@ -1,4 +1,4 @@
-package de.yoyosource.utils;
+package de.yoyosource.symbols;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
