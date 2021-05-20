@@ -86,7 +86,6 @@ public class Rule {
             }
             lists.addAll(toAdd);
         }
-        lists.forEach(System.out::println);
         return lists;
     }
 }

@@ -19,7 +19,7 @@ public class TypedSymbol {
     }
 
     public static void create(List<Symbol> symbolList, ScanRule scanRule) {
-        List<TypedSymbol> typedSymbols = symbolList.stream().map(TypedSymbol::new).collect(Collectors.toList());
+        List<TypedSymbol> typedSymbols = symbolList.stream().map(Symbol::copy).map(TypedSymbol::new).collect(Collectors.toList());
         // TODO: implement type System
         System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
     }
@@ -27,8 +27,14 @@ public class TypedSymbol {
     @Override
     public String toString() {
         if (type == null) {
+            if (symbol.is(SymbolModifier.REMOVED) && symbol.is(SymbolModifier.VOCAL)) {
+                return symbol.getC() + "̶";
+            }
+            if (symbol.is(SymbolModifier.REMOVED)) {
+                return "_";
+            }
             return "" + symbol.getC();
         }
-        return "[" + type.printChar + symbol.getC() + "]";
+        return "" + symbol.getC() + type.aboveChar;
     }
 }

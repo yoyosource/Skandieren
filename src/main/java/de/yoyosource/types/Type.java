@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Type {
-    L('-'),
-    K('•'),
-    E('×');
+    L('-', '̄'),
+    K('•', '̆'),
+    E('×', '̉');
 
     public final char printChar;
+    public final char aboveChar;
 }

@@ -5,6 +5,7 @@ import de.yoyosource.rules.RuleComponent;
 import de.yoyosource.symbols.Symbol;
 import de.yoyosource.symbols.SymbolModifier;
 import de.yoyosource.types.Type;
+import de.yoyosource.types.TypeComposition;
 import lombok.Getter;
 import yapion.hierarchy.types.YAPIONArray;
 import yapion.hierarchy.types.YAPIONObject;
@@ -16,8 +17,9 @@ import java.util.function.Predicate;
 @Getter
 public class ScanRule {
 
-    private Set<List<Type>> innerTypes = new HashSet<>();
-    private Set<List<Type>> endTypes = new HashSet<>();
+    private Set<TypeComposition> innerTypes = new HashSet<>();
+    private Set<TypeComposition> endTypes = new HashSet<>();
+    private Map<Integer, List<TypeComposition>> typesMap = new HashMap<>();
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
     private List<Rule> alwaysRules = new ArrayList<>();
     private List<Rule> sometimesRules = new ArrayList<>();
@@ -32,15 +34,16 @@ public class ScanRule {
                     types[i] = Type.valueOf((type.charAt(i) + "").toUpperCase());
                 }
                 if (type.contains("E")) {
-                    endTypes.add(Arrays.asList(types));
+                    endTypes.add(new TypeComposition(Arrays.asList(types)));
                 } else {
-                    innerTypes.add(Arrays.asList(types));
+                    innerTypes.add(new TypeComposition(Arrays.asList(types)));
                 }
             } catch (IllegalArgumentException e) {
                 // Ignored
             }
         });
-        // System.out.println(innerTypes + " " + endTypes);
+        int metricalFoots = yapionObject.getPlainValueOrDefault("metrical-foots", 6);
+        // System.out.println(innerTypes + " " + endTypes + " " + metricalFoots);
 
         YAPIONObject symbolsObject = yapionObject.getObject("symbols");
         symbolsObject.forEach((s, yapionAnyType) -> {
