@@ -1,19 +1,22 @@
 package de.yoyosource.symbols;
 
 import de.yoyosource.ScanRule;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode
 @Getter
 public class Symbol {
     private final char c;
     private int modifiers = 0;
 
     public void add(SymbolModifier symbolModifier) {
+        if (symbolModifier == null) return;
         modifiers |= symbolModifier.bit;
     }
 
@@ -38,13 +41,18 @@ public class Symbol {
 
     @Override
     public String toString() {
-        StringBuilder st = new StringBuilder();
-        st.append("Symbol{");
-        st.append("'").append(c).append("':'");
+        StringBuilder st = new StringBuilder().append("Symbol{'").append(c).append("':'");
         for (SymbolModifier value : SymbolModifier.values()) {
             st.append(is(value) ? value.printChar : ' ');
         }
-        st.append("'}");
-        return st.toString();
+        return st.append("'}").toString();
+    }
+
+    public static List<Symbol> copy(List<Symbol> list) {
+        return list.stream().map(Symbol::copy).collect(Collectors.toList());
+    }
+
+    public Symbol copy() {
+        return new Symbol(c, modifiers);
     }
 }

@@ -1,5 +1,8 @@
 package de.yoyosource;
 
+import de.yoyosource.rules.Rule;
+import de.yoyosource.rules.RuleComponent;
+import de.yoyosource.symbols.Symbol;
 import de.yoyosource.symbols.SymbolModifier;
 import de.yoyosource.types.Type;
 import lombok.Getter;
@@ -19,6 +22,8 @@ public class ScanRule {
     private List<List<Type>> innerTypes = new ArrayList<>();
     private List<List<Type>> endTypes = new ArrayList<>();
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
+    private List<Rule> alwaysRules = new ArrayList<>();
+    private List<Rule> sometimesRules = new ArrayList<>();
 
     public ScanRule(YAPIONObject yapionObject) {
         YAPIONArray typesObject = yapionObject.getArray("types");
@@ -53,10 +58,51 @@ public class ScanRule {
         System.out.println(symbolsChecker);
 
         YAPIONArray rulesAlwaysObject = yapionObject.getArray("rules-always");
-        System.out.println(rulesAlwaysObject);
+        createRules(rulesAlwaysObject, alwaysRules);
+        System.out.println(alwaysRules);
 
         YAPIONArray rulesSometimesObject = yapionObject.getArray("rules-sometimes");
-        System.out.println(rulesSometimesObject);
+        createRules(rulesSometimesObject, sometimesRules);
+        System.out.println(sometimesRules);
+    }
+
+    private void createRules(YAPIONArray yapionArray, List<Rule> rules) {
+        yapionArray.forEach(yapionAnyType -> {
+            YAPIONArray ruleArray = (YAPIONArray) yapionAnyType;
+            List<String[]> strings = new ArrayList<>();
+            ruleArray.forEach(ruleElement -> {
+                String[] ruleElements = ((YAPIONValue<String>) ruleElement).get().split(">");
+                if (ruleElements.length != 2) return;
+                for (int i = 0; i < ruleElements.length; i++) {
+                    ruleElements[i] = ruleElements[i].trim();
+                }
+                strings.add(ruleElements);
+            });
+
+            List<RuleComponent> ruleComponents = new ArrayList<>();
+            for (String[] ruleElement : strings) {
+
+                String first = ruleElement[0];
+                Predicate<Symbol> symbolPredicate;
+                if (first.length() == 1) {
+                    symbolPredicate = symbol -> symbol.getC() == first.charAt(0);
+                } else {
+                    symbolPredicate = symbol -> symbolsChecker.get(SymbolModifier.valueOf(first.toUpperCase())).test(symbol.getC());
+                }
+
+                String second = ruleElement[1];
+                SymbolModifier result;
+                if (second.equalsIgnoreCase("retain")) {
+                    result = null;
+                } else {
+                    result = SymbolModifier.valueOf(second.toUpperCase());
+                }
+
+                ruleComponents.add(new RuleComponent(symbolPredicate, result));
+            }
+
+            rules.add(new Rule(ruleComponents.toArray(new RuleComponent[0])));
+        });
     }
 
 }

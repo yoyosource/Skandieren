@@ -118,7 +118,7 @@
             muta > retain,
         ],
         [
-            non-vocal > retain,
+            non_vocal > retain,
             h > removed,
             vocal > retain,
         ],
