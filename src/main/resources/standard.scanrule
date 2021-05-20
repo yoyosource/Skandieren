@@ -126,6 +126,6 @@
             e > removed,
             space > removed,
             vocal > retain,
-        ],
+        ]
     ]
 }

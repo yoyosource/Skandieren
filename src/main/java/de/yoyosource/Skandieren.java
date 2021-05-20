@@ -32,6 +32,7 @@ public class Skandieren {
             } catch (YAPIONParserException e) {
                 System.out.println("INVALID INPUT");
             }
+            break;
         }
     }
 
