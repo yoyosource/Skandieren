@@ -33,8 +33,8 @@
         ],
         [
             vocal > long,
-            non_vocal | liquida > retain,
-            non_vocal | muta, q > retain,
+            non_vocal | muta > retain,
+            non_vocal | liquida, q > retain,
         ],
         [
             special > removed,
@@ -79,11 +79,6 @@
             e > removed,
             s > retain,
             t > retain,
-        ],
-        [
-            vocal > long,
-            liquida > retain,
-            muta > retain,
         ],
         [
             non_vocal > retain,
