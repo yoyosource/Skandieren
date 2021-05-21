@@ -23,14 +23,21 @@
             h > removed,
         ],
         [
+            t > retain,
+            h > removed,
+        ],
+        [
             e > retain,
             s > removed,
             t > retain,
         ],
         [
             vocal > long,
-            non_vocal > retain,
-            non_vocal > retain,
+            non_vocal | liquida > retain,
+            non_vocal | muta, q > retain,
+        ],
+        [
+            special > removed,
         ]
     ]
     rules-sometimes[
@@ -60,50 +67,10 @@
             vocal > removed,
         ],
         [
+            vocal > removed,
+            space > removed,
+            h > removed,
             vocal > retain,
-            space > removed,
-            h > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            special > retain,
-            space > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            space > retain,
-            special > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            special > retain,
-            space > removed,
-            m > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            special > retain,
-            space > removed,
-            h > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            space > removed,
-            special > retain,
-            m > retain,
-            vocal > removed,
-        ],
-        [
-            vocal > long,
-            space > removed,
-            special > retain,
-            h > retain,
-            vocal > removed,
         ],
         [
             u > long,

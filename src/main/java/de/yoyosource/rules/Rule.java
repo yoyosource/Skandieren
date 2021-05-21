@@ -51,7 +51,7 @@ public class Rule {
                 return false;
             }
             if (symbols.get(access).is(SymbolModifier.REMOVED)) {
-                i++;
+                index++;
                 continue;
             }
             if (!ruleComponents[i].getCheckPredicate().test(symbols.get(access))) {
@@ -67,7 +67,7 @@ public class Rule {
         while (i < ruleComponents.length) {
             int access = i + index;
             if (symbols.get(access).is(SymbolModifier.REMOVED)) {
-                i++;
+                index++;
                 continue;
             }
             symbols.get(access).add(ruleComponents[i].getResult());

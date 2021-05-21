@@ -26,7 +26,8 @@ public class Skandieren {
                 ScanRule scanRule = new ScanRule(yapionObject);
                 // List<Symbol> symbolList = Symbol.toSymbols("In nova fert animus mutatas dicere formas", scanRule);
                 // List<Symbol> symbolList = Symbol.toSymbols("aspirate meis primaque ab origine mundi", scanRule);
-                List<Symbol> symbolList = Symbol.toSymbols("Utque meum intonsis caput est iuvenale capillis,", scanRule);
+                // List<Symbol> symbolList = Symbol.toSymbols("Utque meum intonsis caput est iuvenale capillis,", scanRule);
+                List<Symbol> symbolList = Symbol.toSymbols("te coma, te citharae, te nostrae, laura, pharetrae", scanRule);
                 Rule.apply(symbolList, scanRule).forEach(symbols -> {
                     TypedSymbol.create(symbols, scanRule);
                 });

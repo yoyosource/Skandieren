@@ -7,10 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -22,7 +19,7 @@ public class TypedSymbol {
 
     public TypedSymbol(Symbol symbol) {
         this.symbol = symbol;
-        type = symbol.is(SymbolModifier.LONG) ? Type.L : null;
+        type = !symbol.is(SymbolModifier.REMOVED) && symbol.is(SymbolModifier.LONG) ? Type.L : null;
     }
 
     public static List<List<TypedSymbol>> create(List<Symbol> symbolList, ScanRule scanRule) {
@@ -30,8 +27,10 @@ public class TypedSymbol {
         int length = (int) symbolList.stream().filter(symbol -> symbol.is(SymbolModifier.VOCAL) && !symbol.is(SymbolModifier.REMOVED)).count();
         Set<List<TypeComposition>> typeCompositions = scanRule.getTypesMap().get(length);
         if (typeCompositions == null) {
+            System.out.println("TO LONG " + length);
             return Collections.emptyList();
         }
+
         List<List<TypedSymbol>> result = new ArrayList<>();
         for (List<TypeComposition> typeCompositionList : typeCompositions) {
             List<TypedSymbol> current = typedSymbols.stream().map(TypedSymbol::copy).collect(Collectors.toList());
@@ -54,10 +53,11 @@ public class TypedSymbol {
             }
         }
         if (result.isEmpty()) {
+            System.out.println("NO RESULT");
+            System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
             return Collections.emptyList();
         }
         // System.out.println();
-        // System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
         for (List<TypedSymbol> typedSymbolList : result) {
             System.out.println(typedSymbolList.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
         }
@@ -75,6 +75,8 @@ public class TypedSymbol {
         if (symbol.is(SymbolModifier.REMOVED)) {
             if (symbol.is(SymbolModifier.VOCAL)) {
                 st.append("̶");
+            } else if (symbol.is(SymbolModifier.SPECIAL)) {
+                // IGNORED
             } else {
                 st.setCharAt(st.length() - 1, '_');
             }

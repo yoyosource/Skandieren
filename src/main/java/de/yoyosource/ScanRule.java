@@ -126,9 +126,10 @@ public class ScanRule {
             for (String[] ruleElement : strings) {
 
                 String first = ruleElement[0];
+                // TODO: implement new parsing System
                 Predicate<Symbol> symbolPredicate;
                 if (first.length() == 1) {
-                    symbolPredicate = symbol -> symbol.getC() == first.charAt(0);
+                    symbolPredicate = symbol -> Character.toLowerCase(symbol.getC()) == Character.toLowerCase(first.charAt(0));
                 } else {
                     symbolPredicate = symbol -> symbolsChecker.get(SymbolModifier.valueOf(first.toUpperCase())).test(symbol.getC());
                 }
