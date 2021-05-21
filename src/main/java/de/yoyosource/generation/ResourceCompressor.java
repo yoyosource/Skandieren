@@ -32,7 +32,7 @@ public class ResourceCompressor {
             yapionObject.toYAPION(new FileGZIPOutput(new File(file.getAbsoluteFile() + ".gz"))).close();
             LengthOutput lengthOutput = new LengthOutput();
             lengthOutput.setIndentator(Indentator.QUAD_SPACE);
-            System.out.println("COMPRESSION: " + (int) (100 - new File(file.getAbsoluteFile() + ".gz").length() / (double) yapionObject.toYAPION(lengthOutput).getPrettifiedLength() * 100.0) + "%");
+            System.out.println("COMPRESSION: " + ((int) (10000 - new File(file.getAbsoluteFile() + ".gz").length() / (double) yapionObject.toYAPION(lengthOutput).getPrettifiedLength() * 10000.0) / 100.0) + "%");
         }
     }
 

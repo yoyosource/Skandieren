@@ -19,7 +19,7 @@ public class ScanRule {
 
     private Set<TypeComposition> innerTypes = new HashSet<>();
     private Set<TypeComposition> endTypes = new HashSet<>();
-    private Map<Integer, List<TypeComposition>> typesMap = new HashMap<>();
+    private Map<Integer, Set<List<TypeComposition>>> typesMap = new HashMap<>();
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
     private List<Rule> alwaysRules = new ArrayList<>();
     private List<Rule> sometimesRules = new ArrayList<>();
@@ -43,6 +43,7 @@ public class ScanRule {
             }
         });
         int metricalFoots = yapionObject.getPlainValueOrDefault("metrical-foots", 6);
+        generateTypeArrays(metricalFoots);
         // System.out.println(innerTypes + " " + endTypes + " " + metricalFoots);
 
         YAPIONObject symbolsObject = yapionObject.getObject("symbols");
@@ -64,6 +65,48 @@ public class ScanRule {
         YAPIONArray rulesSometimesObject = yapionObject.getArray("rules-sometimes");
         createRules(rulesSometimesObject, sometimesRules);
         // System.out.println(sometimesRules);
+    }
+
+    private void generateTypeArrays(int metricalFoots) {
+        int[] indices = new int[metricalFoots];
+        List<TypeComposition> innerTypes = new ArrayList<>(this.innerTypes);
+        List<TypeComposition> endTypes = new ArrayList<>(this.endTypes);
+
+        do {
+            List<TypeComposition> typeCompositions = current(indices, innerTypes, endTypes);
+            typesMap.computeIfAbsent(length(typeCompositions), i -> new HashSet<>()).add(typeCompositions);
+        } while (update(indices, innerTypes.size(), endTypes.size()));
+    }
+
+    private List<TypeComposition> current(int[] indices, List<TypeComposition> innerTypes, List<TypeComposition> endTypes) {
+        List<TypeComposition> result = new ArrayList<>();
+        for (int i = 0; i < indices.length; i++) {
+            if (i == indices.length - 1) {
+                result.add(endTypes.get(indices[i]));
+            } else {
+                result.add(innerTypes.get(indices[i]));
+            }
+        }
+        return result;
+    }
+
+    private boolean update(int[] indices, int lengthInner, int lengthEnd) {
+        for (int i = 0; i < indices.length; i++) {
+            indices[i] += 1;
+            if (i == indices.length - 1) {
+                return indices[i] < lengthEnd;
+            } else {
+                if (indices[i] < lengthInner) {
+                    return true;
+                }
+                indices[i] = 0;
+            }
+        }
+        return true;
+    }
+
+    private int length(List<TypeComposition> typeCompositions) {
+        return typeCompositions.stream().mapToInt(typeComposition -> typeComposition.getTypeList().size()).sum();
     }
 
     private void createRules(YAPIONArray yapionArray, List<Rule> rules) {
