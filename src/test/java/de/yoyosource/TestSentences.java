@@ -52,7 +52,6 @@ public class TestSentences {
 
         YAPIONObject yapionObject = YAPIONParser.parse(new File("./src/main/resources/standard.scanrule"));
         ScanRule scanRule = new ScanRule(yapionObject);
-        List<String> success = new ArrayList<>();
         List<String> failed = new ArrayList<>();
 
         for (String s : text) {
@@ -65,15 +64,14 @@ public class TestSentences {
             });
             if (result.isEmpty()) {
                 failed.add(s);
-            } else {
-                success.add(s);
             }
         }
 
-        System.out.println("Success");
-        success.forEach(System.out::println);
-        System.out.println("Failed");
-        failed.forEach(System.out::println);
+        if (!failed.isEmpty()) {
+            System.out.println();
+            System.out.println("Failed");
+            failed.forEach(System.out::println);
+        }
     }
 
 }

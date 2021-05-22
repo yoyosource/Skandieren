@@ -71,9 +71,6 @@ public class TypedSymbol {
     public String toString() {
         StringBuilder st = new StringBuilder();
         st.append(symbol.getC());
-        if (symbol.is(SymbolModifier.IGNORED)) {
-            st.setCharAt(st.length() - 1, ' ');
-        }
         if (symbol.is(SymbolModifier.REMOVED)) {
             if (symbol.is(SymbolModifier.VOCAL)) {
                 st.append("̶");
