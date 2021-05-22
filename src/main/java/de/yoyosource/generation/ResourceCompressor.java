@@ -29,10 +29,13 @@ public class ResourceCompressor {
                 });
             });
             System.out.println("OBJECT:      " + yapionObject);
-            yapionObject.toYAPION(new FileGZIPOutput(new File(file.getAbsoluteFile() + ".gz"))).close();
+            File fileGz = new File(file.getAbsoluteFile() + ".gz");
+            yapionObject.toYAPION(new FileGZIPOutput(fileGz)).close();
             LengthOutput lengthOutput = new LengthOutput();
             lengthOutput.setIndentator(Indentator.QUAD_SPACE);
-            System.out.println("COMPRESSION: " + ((int) (10000 - new File(file.getAbsoluteFile() + ".gz").length() / (double) yapionObject.toYAPION(lengthOutput).getPrettifiedLength() * 10000.0) / 100.0) + "%");
+            long compressedLength = fileGz.length();
+            long uncompressedLength = yapionObject.toYAPION(lengthOutput).getPrettifiedLength();
+            System.out.println("COMPRESSION: " + ((int) (10000 - compressedLength / (double) uncompressedLength * 10000.0) / 100.0) + "%   " + compressedLength + " " + uncompressedLength);
         }
     }
 
