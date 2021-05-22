@@ -1,0 +1,36 @@
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+header {
+    height: 70px;
+    text-align: center;
+    background-color: #eeeeee;
+    color: #444444;
+
+    border-bottom: 1px solid #aaaaaa;
+
+    position: -webkit-sticky;
+    position: sticky;
+    # position: absolute;
+    top: 0px;
+    width: 100%;
+}
+
+.Content {
+  top: 70px;
+  height: 80%;
+  position: relative;
+  overflow: auto;
+  width: 100%;
+}
+
+input {
+    font-size: 20px;
+    margin-left: 2%;
+    width: 96%;
+}
