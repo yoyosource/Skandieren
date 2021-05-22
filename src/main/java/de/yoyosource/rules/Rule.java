@@ -2,7 +2,6 @@ package de.yoyosource.rules;
 
 import de.yoyosource.ScanRule;
 import de.yoyosource.symbols.Symbol;
-import de.yoyosource.symbols.SymbolModifier;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -50,7 +49,7 @@ public class Rule {
             if (access >= symbols.size()) {
                 return false;
             }
-            if (symbols.get(access).is(SymbolModifier.REMOVED)) {
+            if (symbols.get(access).ignored()) {
                 index++;
                 continue;
             }
@@ -66,7 +65,7 @@ public class Rule {
         int i = 0;
         while (i < ruleComponents.length) {
             int access = i + index;
-            if (symbols.get(access).is(SymbolModifier.REMOVED)) {
+            if (symbols.get(access).ignored()) {
                 index++;
                 continue;
             }

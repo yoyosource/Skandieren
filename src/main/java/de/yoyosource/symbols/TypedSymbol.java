@@ -19,29 +19,29 @@ public class TypedSymbol {
 
     public TypedSymbol(Symbol symbol) {
         this.symbol = symbol;
-        type = !symbol.is(SymbolModifier.REMOVED) && symbol.is(SymbolModifier.LONG) ? Type.L : null;
+        type = (!symbol.ignored() && symbol.is(SymbolModifier.LONG)) ? Type.L : null;
     }
 
     public static List<List<TypedSymbol>> create(List<Symbol> symbolList, ScanRule scanRule) {
         List<TypedSymbol> typedSymbols = symbolList.stream().map(Symbol::copy).map(TypedSymbol::new).collect(Collectors.toList());
-        int length = (int) symbolList.stream().filter(symbol -> symbol.is(SymbolModifier.VOCAL) && !symbol.is(SymbolModifier.REMOVED)).count();
+        int length = (int) symbolList.stream().filter(symbol -> symbol.is(SymbolModifier.VOCAL) && !symbol.ignored()).count();
         Set<List<TypeComposition>> typeCompositions = scanRule.getTypesMap().get(length);
         if (typeCompositions == null) {
-            System.out.println("TO LONG " + length);
+            // System.out.println("TO LONG " + length);
             return Collections.emptyList();
         }
 
         List<List<TypedSymbol>> result = new ArrayList<>();
         for (List<TypeComposition> typeCompositionList : typeCompositions) {
             List<TypedSymbol> current = typedSymbols.stream().map(TypedSymbol::copy).collect(Collectors.toList());
-            List<TypedSymbol> vocals = current.stream().filter(typedSymbol -> typedSymbol.getSymbol().is(SymbolModifier.VOCAL) && !typedSymbol.getSymbol().is(SymbolModifier.REMOVED)).collect(Collectors.toList());
+            List<TypedSymbol> vocals = current.stream().filter(typedSymbol -> typedSymbol.getSymbol().is(SymbolModifier.VOCAL) && !typedSymbol.getSymbol().ignored()).collect(Collectors.toList());
             List<Type> types = typeCompositionList.stream().flatMap(typeComposition -> typeComposition.getTypeList().stream()).collect(Collectors.toList());
             int index = 0;
             while (index < vocals.size()) {
                 TypedSymbol vocal = vocals.get(index);
                 Type type = types.get(index);
 
-                if (vocal.type == null) {
+                if (vocal.type == null || type == Type.E) {
                     vocal.type = type;
                 } else if (vocal.type != type) {
                     break;
@@ -53,8 +53,7 @@ public class TypedSymbol {
             }
         }
         if (result.isEmpty()) {
-            System.out.println("NO RESULT");
-            System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
+            // System.out.println("NO RESULT   " + typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
             return Collections.emptyList();
         }
         // System.out.println();
@@ -72,11 +71,12 @@ public class TypedSymbol {
     public String toString() {
         StringBuilder st = new StringBuilder();
         st.append(symbol.getC());
+        if (symbol.is(SymbolModifier.IGNORED)) {
+            st.setCharAt(st.length() - 1, ' ');
+        }
         if (symbol.is(SymbolModifier.REMOVED)) {
             if (symbol.is(SymbolModifier.VOCAL)) {
                 st.append("̶");
-            } else if (symbol.is(SymbolModifier.SPECIAL)) {
-                // IGNORED
             } else {
                 st.setCharAt(st.length() - 1, '_');
             }

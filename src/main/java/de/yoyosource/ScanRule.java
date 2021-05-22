@@ -126,12 +126,29 @@ public class ScanRule {
             for (String[] ruleElement : strings) {
 
                 String first = ruleElement[0];
-                // TODO: implement new parsing System
                 Predicate<Symbol> symbolPredicate;
                 if (first.length() == 1) {
                     symbolPredicate = symbol -> Character.toLowerCase(symbol.getC()) == Character.toLowerCase(first.charAt(0));
                 } else {
-                    symbolPredicate = symbol -> symbolsChecker.get(SymbolModifier.valueOf(first.toUpperCase())).test(symbol.getC());
+                    int index = first.indexOf('|');
+                    int lastIndex = first.lastIndexOf('|');
+                    if (first.contains("|") && index == lastIndex) {
+                        SymbolModifier current = SymbolModifier.valueOf(first.substring(0, index).trim().toUpperCase());
+                        symbolPredicate = symbol -> symbolsChecker.get(current).test(symbol.getC());
+
+                        String[] second = first.substring(index + 1).trim().split(",");
+                        symbolPredicate = symbolPredicate.and(Arrays.stream(second).map(String::trim).filter(s -> !s.isEmpty()).map(s -> {
+                            if (s.length() == 1) {
+                                return (Predicate<Symbol>) symbol -> Character.toLowerCase(symbol.getC()) == Character.toLowerCase(s.charAt(0));
+                            } else {
+                                SymbolModifier now = SymbolModifier.valueOf(s.toUpperCase());
+                                return (Predicate<Symbol>) symbol -> symbolsChecker.get(now).test(symbol.getC());
+                            }
+                        }).reduce(symbol -> true, Predicate::and).negate());
+                    } else {
+                        SymbolModifier current = SymbolModifier.valueOf(first.toUpperCase());
+                        symbolPredicate = symbol -> symbolsChecker.get(current).test(symbol.getC());
+                    }
                 }
 
                 String second = ruleElement[1];

@@ -34,10 +34,10 @@
         [
             vocal > long,
             non_vocal | muta > retain,
-            non_vocal | liquida, q > retain,
+            non_vocal | liquida\, q > retain,
         ],
         [
-            special > removed,
+            special > ignored,
         ]
     ]
     rules-sometimes[

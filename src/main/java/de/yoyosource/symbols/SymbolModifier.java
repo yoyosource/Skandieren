@@ -18,7 +18,8 @@ public enum SymbolModifier {
     NON_VOCAL(0x0020, 'n'),
     MUTA(0x0040, 'm'),
     LIQUIDA(0x0080, 'l'),
-    UNKNOWN(0x0100, 'u');
+    UNKNOWN(0x0100, 'u'),
+    IGNORED(0x0200, 'i');
 
     final int bit;
     final char printChar;

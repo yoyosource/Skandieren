@@ -20,6 +20,10 @@ public class Symbol {
         modifiers |= symbolModifier.bit;
     }
 
+    public boolean ignored() {
+        return is(SymbolModifier.REMOVED) || is(SymbolModifier.IGNORED);
+    }
+
     public boolean is(SymbolModifier symbolModifier) {
         return (modifiers & symbolModifier.bit) != 0;
     }
