@@ -4,6 +4,8 @@ body {
     border: 0;
     outline: 0;
     background: transparent;
+
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 
 header {
@@ -14,23 +16,38 @@ header {
 
     border-bottom: 1px solid #aaaaaa;
 
-    position: -webkit-sticky;
-    position: sticky;
-    # position: absolute;
+    position: absolute;
+    position: fixed;
     top: 0px;
     width: 100%;
+    z-index: 10;
 }
 
-.Content {
-  top: 70px;
-  height: 80%;
-  position: relative;
-  overflow: auto;
-  width: 100%;
+.content {
+    top:70px;
+    position:relative;
+    height:100%;
+    width:100%;
+    overflow:auto;
 }
 
 input {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
-    margin-left: 2%;
-    width: 96%;
+    margin-left: 5%;
+    width: 90%;
+}
+
+.percent {
+    font-size: 20px;
+    align: right;
+    margin-left: 1.5%;
+    padding-left: -0.5%;
+    float: left;
+}
+
+.text {
+    font-size: 20px;
+    margin-left: 5%;
+    width: 90%;
 }
