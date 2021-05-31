@@ -68,7 +68,7 @@ public class TestSentences {
         }
 
         if (!failed.isEmpty()) {
-            System.out.println();
+            System.out.println("\n");
             System.out.println("Failed");
             failed.forEach(System.out::println);
         }
