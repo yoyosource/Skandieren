@@ -8,9 +8,10 @@ function getInputValue(event) {
 }
 
 function skandieren(input) {
-    if (!(input typeOf String)) {
-        return
+    if (!(typeof(input) === "string")) {
+        return;
     }
+    console.log("Hello World 2")
     async () => {
         const response = await fetch('<API>', {
             method: 'POST',
