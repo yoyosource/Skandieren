@@ -4,11 +4,10 @@ body {
     border: 0;
     outline: 0;
     background: transparent;
-
-    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
 
 header {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     height: 70px;
     text-align: center;
     background-color: #eeeeee;
@@ -41,12 +40,13 @@ input {
 .percent {
     font-size: 20px;
     align: right;
-    margin-left: 1.5%;
-    padding-left: -0.5%;
+    margin-left: 0.5%;
     float: left;
+    font-family:Arial;
 }
 
 .text {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
     margin-left: 5%;
     width: 90%;
