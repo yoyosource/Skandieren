@@ -1,0 +1,65 @@
+// Styling
+body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+header {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    height: 70px;
+    text-align: center;
+    background-color: #eeeeee;
+    color: #444444;
+
+    border-bottom: 1px solid #aaaaaa;
+
+    position: absolute;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 10;
+}
+
+.content {
+    top:70px;
+    position:relative;
+    height:100%;
+    width:100%;
+    overflow:auto;
+}
+
+input {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 20px;
+    margin-left: 5%;
+    width: 90%;
+}
+
+.percent {
+    font-size: 20px;
+    align: right;
+    margin-left: calc(5% - 60px);
+    float: left;
+    font-family:Arial;
+}
+
+.text {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 20px;
+    margin-left: 5%;
+    width: 90%;
+    padding-left: 3px;
+}
+
+// JS stuff
+#input {
+}
+
+#output {
+}
+
+#stylesheet {
+}

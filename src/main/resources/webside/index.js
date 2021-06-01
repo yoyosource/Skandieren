@@ -50,7 +50,7 @@ function skandieren(input) {
     let result = {
         "results": results
     };
-    for (var i = 0; i < Math.floor((Math.random() * 40) + 1); i++) {
+    for (var i = 0; i < Math.floor((Math.random() * 100) + 1); i++) {
         let number = Math.floor(Math.random() * 1000) / 10.0;
         let random = Math.random();
         if (random > 0.7) {
