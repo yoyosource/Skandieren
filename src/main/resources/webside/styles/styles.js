@@ -1,5 +1,5 @@
 function swapStyleSheet(sheet) {
-    document.getElementById("stylesheet").setAttribute("href", sheet);
+    document.getElementById("stylesheet").setAttribute("href", 'styles/' + sheet);
 }
 
 // Styles
