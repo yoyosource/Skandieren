@@ -9,8 +9,6 @@ public enum SymbolModifier {
     REMOVED(0x0001, 'R'),
     LONG(0x0002, 'L'),
 
-    // DIPHTHONG,
-
     // Symbol Types
     SPACE(0x0004, 's'),
     SPECIAL(0x0008, 'p'),
