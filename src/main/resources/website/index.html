@@ -3,9 +3,12 @@
 <head>
     <meta charset="utf-8"/>
     <title>Skandieren</title>
+    <script src="fetch.js"></script>
     <script src="index.js"></script>
+    <script src="ruleset/ruleset.js" async></script>
     <script src="styles/styles.js"></script>
     <link id="stylesheet" rel="stylesheet" type="text/css" href="styles/light/default.css">
+    <link rel="stylesheet" type="text/css" href="ruleset/ruleset.css">
     <link rel="stylesheet" type="text/css" href="styles/dropdown.css">
     <!--[if lt IE 9]>
     <script> document.createElement("stack"); </script>
@@ -18,7 +21,14 @@
 </header>
 
 <section class="content">
-    <br><input type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input">
+    <br><input class="input" type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input">
+    <inlineText class="ruleset">
+        <form autocomplete="off" action="/">
+            <div class="autocomplete">
+                <input class="rulesetInput" type="text" onkeydown="getInputValue(event);" placeholder="Ruleset" id="myInput">
+            </div>
+        </form>
+    </inlineText>
     <!--<div class="dropdown" style="height:33px;">
         <div class="dropbtn">Left</div>
         <div class="dropdown-content" style="left:0;">

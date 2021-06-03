@@ -101,7 +101,7 @@ public class Website {
                     s = "standard";
                 }
                 YAPIONObject rules = new YAPIONObject();
-                rules.add("metrical-foots", scanRule.getYapionObject().getYAPIONAnyType("metrical-foots").internalCopy());
+                rules.add("metrical-feet", scanRule.getYapionObject().getYAPIONAnyType("metrical-feet").internalCopy());
                 rules.add("types", scanRule.getYapionObject().getYAPIONAnyType("types").internalCopy());
                 yapionObject.add(s, rules);
             });

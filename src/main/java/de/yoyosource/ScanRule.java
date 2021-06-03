@@ -45,9 +45,9 @@ public class ScanRule {
                 // Ignored
             }
         });
-        int metricalFoots = yapionObject.getPlainValueOrDefault("metrical-foots", 6);
-        generateTypeArrays(metricalFoots);
-        // System.out.println(innerTypes + " " + endTypes + " " + metricalFoots);
+        int metricalFeet = yapionObject.getPlainValueOrDefault("metrical-feet", 6);
+        generateTypeArrays(metricalFeet);
+        // System.out.println(innerTypes + " " + endTypes + " " + metricalFeet);
 
         YAPIONObject symbolsObject = yapionObject.getObject("symbols");
         symbolsObject.forEach((s, yapionAnyType) -> {
