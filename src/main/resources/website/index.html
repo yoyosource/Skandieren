@@ -6,6 +6,7 @@
     <script src="index.js"></script>
     <script src="styles/styles.js"></script>
     <link id="stylesheet" rel="stylesheet" type="text/css" href="styles/light/default.css">
+    <link rel="stylesheet" type="text/css" href="styles/dropdown.css">
     <!--[if lt IE 9]>
     <script> document.createElement("stack"); </script>
     <![endif]-->
@@ -17,7 +18,16 @@
 </header>
 
 <section class="content">
-    <br><input type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input"><br><br>
+    <br><input type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input">
+    <!--<div class="dropdown" style="height:33px;">
+        <div class="dropbtn">Left</div>
+        <div class="dropdown-content" style="left:0;">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+        </div>
+    </div>-->
+    <br><br>
     <div id="output"/>
 </section>
 </body>

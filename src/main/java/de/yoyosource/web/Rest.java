@@ -42,6 +42,7 @@ public class Rest {
         initExceptionHandler(Throwable::printStackTrace);
         staticFiles.location("/website");
         post("/api", (request, response) -> {
+            System.out.println("Request: " + request.body());
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
             String text = yapionObject.getPlainValue("text");
