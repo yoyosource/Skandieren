@@ -28,7 +28,7 @@
         ],
         [
             e > retain,
-            s > removed,
+            s > ignored,
             t > retain,
         ],
         [

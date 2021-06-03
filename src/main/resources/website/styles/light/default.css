@@ -65,9 +65,9 @@ inlineText{
 
 .above {
     position: absolute;
-    top: -12px;
+    top: -16px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 // JS stuff
