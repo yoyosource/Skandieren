@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static de.yoyosource.symbols.SymbolModifier.REMOVED;
 import static spark.Spark.*;
 
-public class Rest {
+public class Website {
 
     private static Map<String, ScanRule> scanRuleMap = new HashMap<>();
 
@@ -42,19 +42,20 @@ public class Rest {
         initExceptionHandler(Throwable::printStackTrace);
         staticFiles.location("/website");
         post("/api", (request, response) -> {
-            System.out.println("Request: " + request.body());
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
+            System.out.println("Request: " + yapionObject);
             String text = yapionObject.getPlainValue("text");
 
-            String scanRuleName = yapionObject.getPlainValueOrDefault("author", "").toLowerCase();
+            YAPIONObject resultObject = new YAPIONObject();
+            String scanRuleName = yapionObject.getPlainValueOrDefault("ruleset", "").toLowerCase();
             if (!scanRuleMap.containsKey(scanRuleName)) {
+                resultObject.add("unknown-author", scanRuleName);
                 scanRuleName = "";
             }
             ScanRule scanRule = scanRuleMap.get(scanRuleName);
 
             // Skandieren
-            YAPIONObject resultObject = new YAPIONObject();
             YAPIONArray allResults = new YAPIONArray();
             resultObject.add("results", allResults);
 
@@ -105,6 +106,12 @@ public class Rest {
                 yapionObject.add(s, rules);
             });
             return yapionObject.toJSONLossy(new StringOutput()).getResult();
+        });
+
+        after((request, response) -> {
+            if (!request.body().contains("\"type\": \"plain\"")) {
+                response.header("Content-Encoding", "gzip");
+            }
         });
     }
 
