@@ -54,6 +54,10 @@ input {
     padding-left: 3px;
 }
 
+.removed {
+    color: #CCCCCC;
+}
+
 // JS stuff
 #input {
 }

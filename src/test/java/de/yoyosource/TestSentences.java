@@ -9,6 +9,7 @@ import yapion.parser.YAPIONParser;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestSentences {
 
@@ -60,7 +61,9 @@ public class TestSentences {
             System.out.println("");
             System.out.println(s);
             Rule.apply(symbolList, scanRule).forEach(symbols -> {
-                result.addAll(TypedSymbol.create(symbols, scanRule));
+                List<List<TypedSymbol>> lists = TypedSymbol.create(symbols, scanRule);
+                lists.forEach(typedSymbols -> System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining())));
+                result.addAll(lists);
             });
             if (result.isEmpty()) {
                 failed.add(s);

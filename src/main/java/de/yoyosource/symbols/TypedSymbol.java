@@ -57,9 +57,9 @@ public class TypedSymbol {
             return Collections.emptyList();
         }
         // System.out.println();
-        for (List<TypedSymbol> typedSymbolList : result) {
+        /*for (List<TypedSymbol> typedSymbolList : result) {
             System.out.println(typedSymbolList.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
-        }
+        }*/
         return result;
     }
 

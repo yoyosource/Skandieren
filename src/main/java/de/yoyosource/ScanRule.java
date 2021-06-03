@@ -17,6 +17,7 @@ import java.util.function.Predicate;
 @Getter
 public class ScanRule {
 
+    private YAPIONObject yapionObject;
     private Set<TypeComposition> innerTypes = new HashSet<>();
     private Set<TypeComposition> endTypes = new HashSet<>();
     private Map<Integer, Set<List<TypeComposition>>> typesMap = new HashMap<>();
@@ -25,6 +26,8 @@ public class ScanRule {
     private List<Rule> sometimesRules = new ArrayList<>();
 
     public ScanRule(YAPIONObject yapionObject) {
+        this.yapionObject = yapionObject;
+
         YAPIONArray typesObject = yapionObject.getArray("types");
         typesObject.forEach(yapionAnyType -> {
             try {

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Type {
     L('-', '̄'),
-    K('•', '̆'),
+    S('•', '̆'),
     E('×', '̉');
 
     public final char printChar;
