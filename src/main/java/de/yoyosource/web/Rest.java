@@ -76,7 +76,15 @@ public class Rest {
                     current.add("text", resultText);
 
                     for (TypedSymbol typedSymbol : typedSymbols) {
-                        resultText.add(new YAPIONObject().add("char", "" + typedSymbol.getSymbol().getC() + (typedSymbol.getType() != null ? typedSymbol.getType().aboveChar : "")).add("removed", typedSymbol.getSymbol().is(REMOVED)));
+                        YAPIONObject typedResult = new YAPIONObject();
+                        resultText.add(typedResult);
+                        typedResult.add("char", "" + typedSymbol.getSymbol().getC());
+                        if (typedSymbol.getType() != null) {
+                            typedResult.add("type", "" + typedSymbol.getType().printChar);
+                        }
+                        if (typedSymbol.getSymbol().is(REMOVED)) {
+                            typedResult.add("removed", true);
+                        }
                     }
                 }
             });

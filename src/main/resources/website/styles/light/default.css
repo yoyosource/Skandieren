@@ -49,13 +49,25 @@ input {
 .text {
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
+    margin-top: 10px;
     margin-left: 5%;
     width: 90%;
     padding-left: 3px;
+    position: relative;
+}
+
+inlineText{
 }
 
 .removed {
     color: #CCCCCC;
+}
+
+.above {
+    position: absolute;
+    top: -12px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 15px;
 }
 
 // JS stuff
