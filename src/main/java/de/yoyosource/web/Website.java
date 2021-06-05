@@ -41,7 +41,7 @@ public class Website {
     public static void main(String[] args) {
         initExceptionHandler(Throwable::printStackTrace);
         staticFiles.location("/website");
-        post("/api", (request, response) -> {
+        post("/api/skandieren", (request, response) -> {
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
             System.out.println("Request: " + yapionObject);
@@ -92,6 +92,7 @@ public class Website {
             });
 
             response.status(200);
+            response.type("application/json");
             return resultObject.toJSON(new StringOutput(false)).getResult();
         });
         get("/api/rulesets", (request, response) -> {
@@ -109,8 +110,14 @@ public class Website {
         });
 
         after((request, response) -> {
-            if (!request.body().contains("\"type\": \"plain\"")) {
+            try {
+                YAPIONObject yapionObject = YAPIONParser.parse(request.body());
+                if (yapionObject.containsKey("plain", Boolean.class) && yapionObject.getValue("plain", Boolean.class).get()) {
+                    return;
+                }
                 response.header("Content-Encoding", "gzip");
+            } catch (Exception e) {
+                // Ignored
             }
         });
     }
