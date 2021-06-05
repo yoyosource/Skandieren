@@ -10,12 +10,16 @@ import yapion.hierarchy.types.YAPIONArray;
 import yapion.hierarchy.types.YAPIONObject;
 import yapion.parser.YAPIONParser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import static de.yoyosource.symbols.SymbolModifier.REMOVED;
 import static spark.Spark.*;
@@ -39,8 +43,29 @@ public class Website {
     }
 
     public static void main(String[] args) {
+        Map<String, Integer> counts = new LinkedHashMap<String, Integer>() {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {
+                return size() > 10;
+            }
+        };
+
         initExceptionHandler(Throwable::printStackTrace);
         staticFiles.location("/website");
+        notFound((request, response) -> {
+            if (counts.containsKey(request.ip())) {
+                counts.put(request.ip(), counts.get(request.ip()) + 1);
+            } else {
+                counts.put(request.ip(), 1);
+            }
+
+            if (counts.get(request.ip()) < 5) {
+                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/errors/404.html"))).lines().collect(Collectors.joining("\n"));
+            } else {
+                counts.remove(request.ip());
+                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/errors/418.html"))).lines().collect(Collectors.joining("\n"));
+            }
+        });
         post("/api/skandieren", (request, response) -> {
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
@@ -93,6 +118,7 @@ public class Website {
 
             response.status(200);
             response.type("application/json");
+            // response.type("application/yapion");
             return resultObject.toJSON(new StringOutput(false)).getResult();
         });
         get("/api/rulesets", (request, response) -> {
