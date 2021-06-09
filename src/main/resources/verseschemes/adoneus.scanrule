@@ -8,7 +8,7 @@
         liquida(lrs)
         vocal(aeiouy)
         non_vocal(bcdfghjklmnpqrstvwxyz)
-        special(.,"-?!:;\(\))
+        special(.,"-?!:;\(\)_)
         space( \t)
     }
     rules-always[
