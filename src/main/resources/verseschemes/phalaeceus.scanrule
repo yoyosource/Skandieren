@@ -1,10 +1,11 @@
 {
-    metrical-feet(6)
-    types[
-        LSS,
-        LL,
-        LE,
-    ]
+    types[[
+        [LS, SL, LL],
+        [LSS, LL],
+        [LS],
+        [LS],
+        [LE]
+    ]]
     symbols{
         muta(bptdgc)
         liquida(lrs)

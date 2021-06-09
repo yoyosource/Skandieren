@@ -18,8 +18,7 @@ import java.util.function.Predicate;
 public class ScanRule {
 
     private YAPIONObject yapionObject;
-    private Set<TypeComposition> innerTypes = new HashSet<>();
-    private Set<TypeComposition> endTypes = new HashSet<>();
+    private List<List<List<TypeComposition>>> types = new ArrayList<>();
     private Map<Integer, Set<List<TypeComposition>>> typesMap = new HashMap<>();
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
     private List<Rule> alwaysRules = new ArrayList<>();
@@ -29,24 +28,31 @@ public class ScanRule {
         this.yapionObject = yapionObject;
 
         YAPIONArray typesObject = yapionObject.getArray("types");
-        typesObject.forEach(yapionAnyType -> {
-            try {
-                String type = ((YAPIONValue<String>) yapionAnyType).get();
-                Type[] types = new Type[type.length()];
-                for (int i = 0; i < type.length(); i++) {
-                    types[i] = Type.valueOf((type.charAt(i) + "").toUpperCase());
+        typesObject.forEach(outerArray -> {
+            YAPIONArray innerArray = (YAPIONArray) outerArray;
+            List<List<TypeComposition>> current = new ArrayList<>();
+            innerArray.forEach(yapionAnyType -> {
+                try {
+                    List<TypeComposition> typeCompositions = new ArrayList<>();
+                    YAPIONArray yapionArray = (YAPIONArray) yapionAnyType;
+                    yapionArray.forEach(yat -> {
+                        String type = ((YAPIONValue<String>) yat).get();
+                        Type[] types = new Type[type.length()];
+                        for (int i = 0; i < type.length(); i++) {
+                            types[i] = Type.valueOf((type.charAt(i) + "").toUpperCase());
+                        }
+                        typeCompositions.add(new TypeComposition(Arrays.asList(types)));
+                    });
+                    current.add(typeCompositions);
+                } catch (IllegalArgumentException e) {
+                    // Ignored
                 }
-                if (type.contains("E")) {
-                    endTypes.add(new TypeComposition(Arrays.asList(types)));
-                } else {
-                    innerTypes.add(new TypeComposition(Arrays.asList(types)));
-                }
-            } catch (IllegalArgumentException e) {
-                // Ignored
-            }
+            });
+            types.add(current);
         });
-        int metricalFeet = yapionObject.getPlainValueOrDefault("metrical-feet", 6);
-        generateTypeArrays(metricalFeet);
+        for (List<List<TypeComposition>> current : types) {
+            generateTypeArrays(current);
+        }
         // System.out.println(innerTypes + " " + endTypes + " " + metricalFeet);
 
         YAPIONObject symbolsObject = yapionObject.getObject("symbols");
@@ -70,36 +76,29 @@ public class ScanRule {
         // System.out.println(sometimesRules);
     }
 
-    private void generateTypeArrays(int metricalFoots) {
-        int[] indices = new int[metricalFoots];
-        List<TypeComposition> innerTypes = new ArrayList<>(this.innerTypes);
-        List<TypeComposition> endTypes = new ArrayList<>(this.endTypes);
-
+    private void generateTypeArrays(List<List<TypeComposition>> types) {
+        int[] indices = new int[types.size()];
         do {
-            List<TypeComposition> typeCompositions = current(indices, innerTypes, endTypes);
+            List<TypeComposition> typeCompositions = current(indices, types);
             typesMap.computeIfAbsent(length(typeCompositions), i -> new HashSet<>()).add(typeCompositions);
-        } while (update(indices, innerTypes.size(), endTypes.size()));
+        } while (update(indices, types));
     }
 
-    private List<TypeComposition> current(int[] indices, List<TypeComposition> innerTypes, List<TypeComposition> endTypes) {
+    private List<TypeComposition> current(int[] indices, List<List<TypeComposition>> types) {
         List<TypeComposition> result = new ArrayList<>();
         for (int i = 0; i < indices.length; i++) {
-            if (i == indices.length - 1) {
-                result.add(endTypes.get(indices[i]));
-            } else {
-                result.add(innerTypes.get(indices[i]));
-            }
+            result.add(types.get(i).get(indices[i]));
         }
         return result;
     }
 
-    private boolean update(int[] indices, int lengthInner, int lengthEnd) {
+    private boolean update(int[] indices, List<List<TypeComposition>> types) {
         for (int i = 0; i < indices.length; i++) {
             indices[i] += 1;
             if (i == indices.length - 1) {
-                return indices[i] < lengthEnd;
+                return indices[i] < types.get(i).size();
             } else {
-                if (indices[i] < lengthInner) {
+                if (indices[i] < types.get(i).size()) {
                     return true;
                 }
                 indices[i] = 0;

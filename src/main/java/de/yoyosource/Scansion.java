@@ -10,7 +10,7 @@ import yapion.parser.YAPIONParser;
 import java.io.File;
 import java.util.List;
 
-public class Skandieren {
+public class Scansion {
 
     public static void main(String[] args) throws Exception {
         File toRead = new File("./src/main/resources/standard.scanrule");

@@ -1,0 +1,94 @@
+{
+    types[[
+        [LSS],
+        [LSS],
+        [LS],
+        [LE]
+    ]]
+    symbols{
+        muta(bptdgc)
+        liquida(lrs)
+        vocal(aeiouy)
+        non_vocal(bcdfghjklmnpqrstvwxyz)
+        special(.,"-?!:;\(\))
+        space( \t)
+    }
+    rules-always[
+        [
+            q > retain,
+            u > removed,
+        ],
+        [
+            p > retain,
+            h > removed,
+        ],
+        [
+            t > retain,
+            h > removed,
+        ],
+        [
+            e > retain,
+            s > ignored,
+            t > retain,
+        ],
+        [
+            vocal > long,
+            non_vocal | muta > retain,
+            non_vocal | liquida\, q > retain,
+        ],
+        [
+            special > ignored,
+        ]
+    ]
+    rules-sometimes[
+        [
+            vocal > long,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            v > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > retain,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            m > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > removed,
+            space > removed,
+            h > removed,
+            vocal > retain,
+        ],
+        [
+            u > long,
+            m > retain,
+            space > removed,
+            e > removed,
+            s > retain,
+            t > retain,
+        ],
+        [
+            non_vocal > retain,
+            h > removed,
+            vocal > retain,
+        ],
+        [
+            e > removed,
+            space > removed,
+            vocal > retain,
+        ]
+    ]
+}

@@ -8,7 +8,7 @@ function getInputValue(event) {
 
     let ruleset = document.getElementById("myInput").value;
 
-    let response = readData("/api/skandieren", { "text": input, "ruleset": ruleset });
+    let response = readData("/api/scansion", { "text": input, "ruleset": ruleset });
         response.then(result => {
             console.log(result);
             display(result);

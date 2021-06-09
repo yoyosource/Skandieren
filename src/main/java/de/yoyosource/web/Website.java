@@ -29,7 +29,7 @@ public class Website {
     private static Map<String, ScanRule> scanRuleMap = new HashMap<>();
 
     static {
-        for (File file : new File("./src/main/resources").listFiles((dir, name) -> name.endsWith(".scanrule"))) {
+        for (File file : new File("./src/main/resources/verseschemes").listFiles((dir, name) -> name.endsWith(".scanrule"))) {
             String name = "";
             if (!file.getName().startsWith("standard")) {
                 name = file.getName().substring(0, file.getName().indexOf('.'));
@@ -60,13 +60,13 @@ public class Website {
             }
 
             if (counts.get(request.ip()) < 5) {
-                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/errors/404.html"))).lines().collect(Collectors.joining("\n"));
+                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/websiteerrors/404.html"))).lines().collect(Collectors.joining("\n"));
             } else {
                 counts.remove(request.ip());
-                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/errors/418.html"))).lines().collect(Collectors.joining("\n"));
+                return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/websiteerrors/418.html"))).lines().collect(Collectors.joining("\n"));
             }
         });
-        post("/api/skandieren", (request, response) -> {
+        post("/api/scansion", (request, response) -> {
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
             System.out.println("Request: " + yapionObject);
@@ -128,7 +128,7 @@ public class Website {
                     s = "standard";
                 }
                 YAPIONObject rules = new YAPIONObject();
-                rules.add("metrical-feet", scanRule.getYapionObject().getYAPIONAnyType("metrical-feet").internalCopy());
+                // rules.add("metrical-feet", scanRule.getYapionObject().getYAPIONAnyType("metrical-feet").internalCopy());
                 rules.add("types", scanRule.getYapionObject().getYAPIONAnyType("types").internalCopy());
                 yapionObject.add(s, rules);
             });
