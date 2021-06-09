@@ -65,8 +65,7 @@ header {
 
 .percent {
     font-size: 20px;
-    margin-top: 10px;
-    align: right;
+    padding-top: 10px;
     margin-left: calc(5% - 60px);
     float: left;
     font-family:Arial;
@@ -75,7 +74,7 @@ header {
 .text {
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
-    margin-top: 10px;
+    padding-top: 10px;
     margin-left: 5%;
     width: 95%;
     padding-left: 13px;
@@ -91,14 +90,14 @@ inlineText{
 
 .above {
     position: absolute;
-    top: -16px;
+    top: -6px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
 }
 
 .below {
     position: absolute;
-    top: 20px;
+    top: 28px;
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 12px;
 }
