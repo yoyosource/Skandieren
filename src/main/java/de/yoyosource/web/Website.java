@@ -3,6 +3,7 @@ package de.yoyosource.web;
 import de.yoyosource.ScanRule;
 import de.yoyosource.rules.Rule;
 import de.yoyosource.symbols.Symbol;
+import de.yoyosource.symbols.SymbolModifier;
 import de.yoyosource.symbols.TypedSymbol;
 import yapion.exceptions.YAPIONException;
 import yapion.hierarchy.output.StringOutput;
@@ -13,14 +14,10 @@ import yapion.parser.YAPIONParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import static de.yoyosource.symbols.SymbolModifier.REMOVED;
 import static spark.Spark.*;
 
 public class Website {
@@ -92,38 +89,60 @@ public class Website {
 
             AtomicBoolean atomicBoolean = new AtomicBoolean(false);
             List<Symbol> symbolList = Symbol.toSymbols(text, scanRule);
+
+            List<List<TypedSymbol>> lists = new ArrayList<>();
             Rule.apply(symbolList, scanRule).forEach(symbols -> {
-                List<List<TypedSymbol>> lists = TypedSymbol.create(symbols, scanRule);
-                if (atomicBoolean.get() && !lists.isEmpty()) {
-                    allResults.add(new YAPIONObject());
+                List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
+                if (atomicBoolean.get() && !current.isEmpty()) {
+                    lists.add(new ArrayList<>());
                 }
                 atomicBoolean.set(false);
-                if (!lists.isEmpty()) {
+                if (!current.isEmpty()) {
                     atomicBoolean.set(true);
+                    current.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percenateg -> percenateg.points(value)).sum()));
+                    lists.addAll(current);
                 }
-                for (List<TypedSymbol> typedSymbols : lists) {
-                    YAPIONObject current = new YAPIONObject();
-                    allResults.add(current);
+            });
 
-                    YAPIONArray resultText = new YAPIONArray();
-                    current.add("text", resultText);
+            int max = 0;
+            for (List<TypedSymbol> typedSymbols : lists) {
+                if (typedSymbols.isEmpty()) {
+                    continue;
+                }
+                int current = scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum();
+                if (current > max) {
+                    max = current;
+                }
+            }
 
-                    for (TypedSymbol typedSymbol : typedSymbols) {
-                        YAPIONObject typedResult = new YAPIONObject();
-                        resultText.add(typedResult);
-                        typedResult.add("char", "" + typedSymbol.getSymbol().getC());
-                        if (typedSymbol.getType() != null) {
-                            typedResult.add("over", "" + typedSymbol.getType().printChar);
-                        }
-                        if (typedSymbol.getSymbol().is(REMOVED)) {
-                            typedResult.add("removed", true);
-                            if (typedSymbol.getSymbol().getC() == ' ') {
-                                typedResult.add("under", true);
-                            }
+            for (List<TypedSymbol> typedSymbols : lists) {
+                if (typedSymbols.isEmpty()) {
+                    allResults.add(new YAPIONObject());
+                    continue;
+                }
+
+                YAPIONObject current = new YAPIONObject();
+                allResults.add(current);
+                current.add("percent", "" + (int)((scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum() / (double) max) * 100));
+
+                YAPIONArray resultText = new YAPIONArray();
+                current.add("text", resultText);
+
+                for (TypedSymbol typedSymbol : typedSymbols) {
+                    YAPIONObject typedResult = new YAPIONObject();
+                    resultText.add(typedResult);
+                    typedResult.add("char", "" + typedSymbol.getSymbol().getC());
+                    if (typedSymbol.getType() != null) {
+                        typedResult.add("over", "" + typedSymbol.getType().printChar);
+                    }
+                    if (typedSymbol.getSymbol().is(SymbolModifier.REMOVED)) {
+                        typedResult.add("removed", true);
+                        if (typedSymbol.getSymbol().getC() == ' ') {
+                            typedResult.add("under", true);
                         }
                     }
                 }
-            });
+            }
 
             response.status(200);
             response.type("application/json");

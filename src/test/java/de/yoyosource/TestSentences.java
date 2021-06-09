@@ -50,7 +50,8 @@ public class TestSentences {
                 "et tumulum capit unde omnis longo ordine posset",
                 "adversos legere et venientum discere vultus.",
                 "Germanum fugiens. Longa est iniuria longae",
-                "Pygmalion, scelere ante alios immanior omnis"
+                "Pygmalion, scelere ante alios immanior omnis",
+                "a .hea ppppa ppppa ppppa ppppa ppppa ppppa ppppa ppppa ppppa ppppa"
         };
 
         YAPIONObject yapionObject = YAPIONParser.parse(new File("./src/main/resources/verseschemes/standard.scanrule"));

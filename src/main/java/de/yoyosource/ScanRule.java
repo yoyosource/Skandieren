@@ -204,7 +204,7 @@ public class ScanRule {
             }
             Predicate<List<TypedSymbol>> finalPredicate = predicate;
             percentageRules.add(typedSymbolList -> {
-                if (finalPredicate.test(typedSymbolList.stream().filter(typedSymbol -> typedSymbol.getSymbol().is(SymbolModifier.VOCAL)).collect(Collectors.toList()))) {
+                if (finalPredicate.test(typedSymbolList.stream().filter(typedSymbol -> typedSymbol.getType() != null).collect(Collectors.toList()))) {
                     return points;
                 }
                 return 0;
