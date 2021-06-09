@@ -123,7 +123,9 @@ public class Website {
 
                 YAPIONObject current = new YAPIONObject();
                 allResults.add(current);
-                current.add("percent", "" + (int)((scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum() / (double) max) * 100));
+                if (!scanRule.getPercentageRules().isEmpty()) {
+                    current.add("percent", "" + (int) ((scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum() / (double) max) * 100));
+                }
 
                 YAPIONArray resultText = new YAPIONArray();
                 current.add("text", resultText);
