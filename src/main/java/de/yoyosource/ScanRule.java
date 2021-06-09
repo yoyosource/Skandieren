@@ -1,9 +1,11 @@
 package de.yoyosource;
 
+import de.yoyosource.percentage.Percentage;
 import de.yoyosource.rules.Rule;
 import de.yoyosource.rules.RuleComponent;
 import de.yoyosource.symbols.Symbol;
 import de.yoyosource.symbols.SymbolModifier;
+import de.yoyosource.symbols.TypedSymbol;
 import de.yoyosource.types.Type;
 import de.yoyosource.types.TypeComposition;
 import lombok.Getter;
@@ -12,7 +14,10 @@ import yapion.hierarchy.types.YAPIONObject;
 import yapion.hierarchy.types.YAPIONValue;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Getter
 public class ScanRule {
@@ -23,6 +28,7 @@ public class ScanRule {
     private EnumMap<SymbolModifier, Predicate<Character>> symbolsChecker = new EnumMap<>(SymbolModifier.class);
     private List<Rule> alwaysRules = new ArrayList<>();
     private List<Rule> sometimesRules = new ArrayList<>();
+    private List<Percentage> percentageRules = new ArrayList<>();
 
     public ScanRule(YAPIONObject yapionObject) {
         this.yapionObject = yapionObject;
@@ -74,6 +80,16 @@ public class ScanRule {
         YAPIONArray rulesSometimesObject = yapionObject.getArray("rules-sometimes");
         createRules(rulesSometimesObject, sometimesRules);
         // System.out.println(sometimesRules);
+
+        if (yapionObject.containsKey("percentages")) {
+            YAPIONObject current = yapionObject.getObject("percentages");
+            if (current.containsKey("vocal")) {
+                generateVocalPercentages(current.getArray("vocal"));
+            }
+            if (current.containsKey("char")) {
+                generateCharPercentages(current.getArray("char"));
+            }
+        }
     }
 
     private void generateTypeArrays(List<List<TypeComposition>> types) {
@@ -165,6 +181,90 @@ public class ScanRule {
             }
 
             rules.add(new Rule(ruleComponents.toArray(new RuleComponent[0])));
+        });
+    }
+
+    private void generateVocalPercentages(YAPIONArray yapionArray) {
+        yapionArray.streamObject().forEach(yapionObject -> {
+            int points = yapionObject.getPlainValue("points");
+            Predicate<List<TypedSymbol>> predicate = typedSymbols -> true;
+            for (String s : yapionObject.getArray("").streamValue().map(YAPIONValue::get).map(Object::toString).collect(Collectors.toList())) {
+                String[] strings = s.split(":");
+                if (strings.length != 2) {
+                    return;
+                }
+                int index = Integer.parseInt(strings[0].trim());
+                try {
+                    SymbolModifier symbolModifier = SymbolModifier.valueOf(strings[1].trim());
+                    predicate = predicate.and(typedSymbols -> typedSymbols.get(index).getSymbol().is(symbolModifier));
+                } catch (Exception e) {
+                    Type type = Type.valueOf(strings[1].trim());
+                    predicate = predicate.and(typedSymbols -> typedSymbols.get(index).getType() == type);
+                }
+            }
+            Predicate<List<TypedSymbol>> finalPredicate = predicate;
+            percentageRules.add(typedSymbolList -> {
+                if (finalPredicate.test(typedSymbolList.stream().filter(typedSymbol -> typedSymbol.getSymbol().is(SymbolModifier.VOCAL)).collect(Collectors.toList()))) {
+                    return points;
+                }
+                return 0;
+            });
+        });
+    }
+
+    private void generateCharPercentages(YAPIONArray yapionArray) {
+        yapionArray.streamObject().forEach(yapionObject -> {
+            int points = yapionObject.getPlainValue("points");
+            BiPredicate<Integer, List<TypedSymbol>> predicate = (i, typedSymbols) -> true;
+            List<String> stringList = yapionObject.getArray("").streamValue().map(YAPIONValue::get).map(Object::toString).collect(Collectors.toList());
+            int index = 0;
+            for (String s : stringList) {
+                Predicate<TypedSymbol> typeOrModifer = typedSymbol -> true;
+                if (s.contains(":")) {
+                    String[] strings = s.split(":");
+                    if (strings.length != 2) {
+                        return;
+                    }
+                    s = strings[0].trim();
+                    String current = strings[1].trim();
+                    try {
+                        SymbolModifier symbolModifier = SymbolModifier.valueOf(current);
+                        typeOrModifer = typedSymbol -> typedSymbol.getSymbol().is(symbolModifier);
+                    } catch (Exception e) {
+                        Type type = Type.valueOf(current);
+                        typeOrModifer = typedSymbol -> typedSymbol.getType() == type;
+                    }
+                }
+
+                String currentChar = s;
+                Predicate<Character> charPredicate;
+                if (currentChar.length() == 1) {
+                    charPredicate = character -> character == currentChar.charAt(0);
+                } else {
+                    SymbolModifier symbolModifier = SymbolModifier.valueOf(currentChar);
+                    charPredicate = symbolsChecker.get(symbolModifier);
+                }
+
+                int finalIndex = index;
+                Predicate<TypedSymbol> finalTypeOrModifer = typeOrModifer;
+                predicate = predicate.and((integer, typedSymbols) -> {
+                    if (!charPredicate.test(typedSymbols.get(integer + finalIndex).getSymbol().getC())) {
+                        return false;
+                    }
+                    return finalTypeOrModifer.test(typedSymbols.get(integer + finalIndex));
+                });
+                index++;
+            }
+            BiPredicate<Integer, List<TypedSymbol>> finalPredicate1 = predicate;
+            percentageRules.add(typedSymbolList -> {
+                int totalPoints = 0;
+                for (int i = 0; i < typedSymbolList.size() - stringList.size(); i++) {
+                    if (finalPredicate1.test(i, typedSymbolList)) {
+                        totalPoints += points;
+                    }
+                }
+                return totalPoints;
+            });
         });
     }
 

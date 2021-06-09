@@ -64,7 +64,10 @@ public class TestSentences {
             System.out.println(s);
             Rule.apply(symbolList, scanRule).forEach(symbols -> {
                 List<List<TypedSymbol>> lists = TypedSymbol.create(symbols, scanRule);
-                lists.forEach(typedSymbols -> System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining())));
+                lists.forEach(typedSymbols -> {
+                    System.out.println(scanRule.getPercentageRules().stream().map(percentage -> percentage.points(typedSymbols)).mapToInt(value -> value).sum());
+                    System.out.println(typedSymbols.stream().map(TypedSymbol::toString).collect(Collectors.joining()));
+                });
                 result.addAll(lists);
             });
             if (result.isEmpty()) {
