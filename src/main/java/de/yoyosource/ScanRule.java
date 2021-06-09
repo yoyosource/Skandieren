@@ -80,7 +80,7 @@ public class ScanRule {
         int[] indices = new int[types.size()];
         do {
             List<TypeComposition> typeCompositions = current(indices, types);
-            typesMap.computeIfAbsent(length(typeCompositions), i -> new HashSet<>()).add(typeCompositions);
+            typesMap.computeIfAbsent(length(typeCompositions), i -> new LinkedHashSet<>()).add(typeCompositions);
         } while (update(indices, types));
     }
 

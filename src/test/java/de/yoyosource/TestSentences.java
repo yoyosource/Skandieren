@@ -53,7 +53,7 @@ public class TestSentences {
                 "Pygmalion, scelere ante alios immanior omnis"
         };
 
-        YAPIONObject yapionObject = YAPIONParser.parse(new File("./src/main/resources/standard.scanrule"));
+        YAPIONObject yapionObject = YAPIONParser.parse(new File("./src/main/resources/verseschemes/standard.scanrule"));
         ScanRule scanRule = new ScanRule(yapionObject);
         List<String> failed = new ArrayList<>();
 

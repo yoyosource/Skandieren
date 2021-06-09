@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,7 +76,7 @@ public class Rule {
 
     public static Set<List<Symbol>> apply(List<Symbol> symbols, ScanRule scanRule) {
         scanRule.getAlwaysRules().forEach(rule -> rule.applyAlways(symbols));
-        Set<List<Symbol>> lists = new HashSet<>();
+        Set<List<Symbol>> lists = new LinkedHashSet<>();
         lists.add(symbols);
         for (Rule rule : scanRule.getSometimesRules()) {
             List<List<Symbol>> toAdd = new ArrayList<>();
