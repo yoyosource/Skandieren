@@ -22,6 +22,8 @@ dependencies {
 
     // implementation 'yoyosource:YAPION:0.25.3'
     implementation files("/Users/jojo/IdeaProjects/YAPION/build/libs/YAPION-SNAPSHOT.jar")
+    annotationProcessor files("/Users/jojo/IdeaProjects/YAPION/build/libs/YAPION-SNAPSHOT.jar")
+    testAnnotationProcessor files("/Users/jojo/IdeaProjects/YAPION/build/libs/YAPION-SNAPSHOT.jar")
 
     // implementation 'io.javalin:javalin:3.13.7'
     implementation "com.sparkjava:spark-core:2.9.3"
