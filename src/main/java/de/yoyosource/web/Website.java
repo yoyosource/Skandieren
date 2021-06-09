@@ -8,11 +8,10 @@ import yapion.exceptions.YAPIONException;
 import yapion.hierarchy.output.StringOutput;
 import yapion.hierarchy.types.YAPIONArray;
 import yapion.hierarchy.types.YAPIONObject;
+import yapion.hierarchy.types.YAPIONValue;
 import yapion.parser.YAPIONParser;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -29,17 +28,20 @@ public class Website {
     private static Map<String, ScanRule> scanRuleMap = new HashMap<>();
 
     static {
-        for (File file : new File("./src/main/resources/verseschemes").listFiles((dir, name) -> name.endsWith(".scanrule"))) {
-            String name = "";
-            if (!file.getName().startsWith("standard")) {
-                name = file.getName().substring(0, file.getName().indexOf('.'));
-            }
+        YAPIONArray yapionArray = new YAPIONParser(Website.class.getResourceAsStream("/verseschemes.yapion"), true).parse().resultArray();
+        yapionArray.streamValue().map(yapionValue -> (YAPIONValue<String>) yapionValue).map(YAPIONValue::get).forEach(name -> {
             try {
-                scanRuleMap.put(name.toLowerCase(), new ScanRule(YAPIONParser.parse(file)));
-            } catch (YAPIONException | IOException e) {
+                ScanRule scanRule = new ScanRule(YAPIONParser.parse(Website.class.getResourceAsStream("/verseschemes/" + name)));
+                if (!name.startsWith("standard")) {
+                    name = name.substring(0, name.indexOf('.'));
+                } else {
+                    name = "";
+                }
+                scanRuleMap.put(name.toLowerCase(), scanRule);
+            } catch (YAPIONException e) {
                 e.printStackTrace();
             }
-        }
+        });
     }
 
     public static void main(String[] args) {
@@ -66,6 +68,10 @@ public class Website {
                 return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/websiteerrors/418.html"))).lines().collect(Collectors.joining("\n"));
             }
         });
+        internalServerError((request, response) -> {
+            return new BufferedReader(new InputStreamReader(Website.class.getResourceAsStream("/websiteerrors/500.html"))).lines().collect(Collectors.joining("\n"));
+        });
+
         post("/api/scansion", (request, response) -> {
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
@@ -107,10 +113,13 @@ public class Website {
                         resultText.add(typedResult);
                         typedResult.add("char", "" + typedSymbol.getSymbol().getC());
                         if (typedSymbol.getType() != null) {
-                            typedResult.add("type", "" + typedSymbol.getType().printChar);
+                            typedResult.add("over", "" + typedSymbol.getType().printChar);
                         }
                         if (typedSymbol.getSymbol().is(REMOVED)) {
                             typedResult.add("removed", true);
+                            if (typedSymbol.getSymbol().getC() == ' ') {
+                                typedResult.add("under", true);
+                            }
                         }
                     }
                 }

@@ -96,6 +96,13 @@ inlineText{
     font-size: 20px;
 }
 
+.below {
+    position: absolute;
+    top: 20px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 12px;
+}
+
 // JS stuff
 #input {
 }

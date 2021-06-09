@@ -38,10 +38,14 @@ function display(result) {
          var textDiv = document.createElement('div');
          textDiv.setAttribute('class', 'text');
          for (var textIndex in result?.results?.[index]?.text) {
+            if (result?.results?.[index]?.text?.[textIndex]?.over) {
+                textDiv.innerHTML += "<inlineText class=\"above\">" + result?.results?.[index]?.text?.[textIndex]?.over + "</inlineText>";
+            }
+            if (result?.results?.[index]?.text?.[textIndex]?.under) {
+                textDiv.innerHTML += "<inlineText class=\"below\">\u23DD</inlineText>";
+            }
             if (result?.results?.[index]?.text?.[textIndex]?.removed) {
                 textDiv.innerHTML += "<inlineText class=\"removed\">" + result?.results?.[index]?.text?.[textIndex]?.char + "</inlineText>";
-            } else if (result?.results?.[index]?.text?.[textIndex]?.type) {
-                textDiv.innerHTML += "<inlineText><inlineText class=\"above\">" + result?.results?.[index]?.text?.[textIndex]?.type + "</inlineText>" + result?.results?.[index]?.text?.[textIndex]?.char + "</inlineText>";
             } else {
                 textDiv.innerHTML += result?.results?.[index]?.text?.[textIndex]?.char;
             }
