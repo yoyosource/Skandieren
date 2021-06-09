@@ -36,7 +36,7 @@ header {
     font-size: 20px;
     margin-left: 5%;
     padding-left: 10px;
-    width: 80%;
+    width: 75%;
     border-radius: 10px;
     box-shadow: 2px 2px;
     outline: none;
@@ -47,7 +47,7 @@ header {
     font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 20px;
     margin-left: 10px;
-    width: 10%;
+    width: 19%;
     outline: none;
     float: right;
     position: absolute;
@@ -77,7 +77,7 @@ header {
     font-size: 20px;
     margin-top: 10px;
     margin-left: 5%;
-    width: 80%;
+    width: 75%;
     padding-left: 13px;
     position: relative;
 }
