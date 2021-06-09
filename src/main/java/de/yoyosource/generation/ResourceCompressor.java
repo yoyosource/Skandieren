@@ -13,9 +13,9 @@ import java.io.IOException;
 public class ResourceCompressor {
 
     public static void main(String[] args) throws IOException {
-        for (File file : new File("./src/main/resources").listFiles((dir, name) -> name.endsWith(".scanrule"))) {
+        for (File file : new File("./src/main/resources/verseschemes").listFiles((dir, name) -> name.endsWith(".scanrule"))) {
             System.out.println("COMPRESSING: " + file);
-            YAPIONObject yapionObject = YAPIONParser.parse(new File("./src/main/resources/standard.scanrule"));
+            YAPIONObject yapionObject = YAPIONParser.parse(file);
             yapionObject.getArray("rules-always").forEach(yapionAnyType -> {
                 YAPIONArray yapionArray = (YAPIONArray) yapionAnyType;
                 yapionArray.allKeys().forEach(integer -> {
