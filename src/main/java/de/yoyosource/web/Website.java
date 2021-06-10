@@ -87,22 +87,27 @@ public class Website {
             YAPIONArray allResults = new YAPIONArray();
             resultObject.add("results", allResults);
 
-            AtomicBoolean atomicBoolean = new AtomicBoolean(false);
             List<Symbol> symbolList = Symbol.toSymbols(text, scanRule);
 
-            List<List<TypedSymbol>> lists = new ArrayList<>();
+            List<List<List<TypedSymbol>>> listList = new ArrayList<>();
             Rule.apply(symbolList, scanRule).forEach(symbols -> {
                 List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
-                if (atomicBoolean.get() && !current.isEmpty()) {
-                    lists.add(new ArrayList<>());
-                }
-                atomicBoolean.set(false);
                 if (!current.isEmpty()) {
-                    atomicBoolean.set(true);
-                    current.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percenateg -> percenateg.points(value)).sum()));
-                    lists.addAll(current);
+                    current.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value)).sum()));
+                    listList.add(current);
                 }
             });
+            listList.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value.get(0))).sum()));
+
+            List<List<TypedSymbol>> lists = new ArrayList<>();
+            boolean b = false;
+            for (List<List<TypedSymbol>> list : listList) {
+                if (b) {
+                    lists.add(new ArrayList<>());
+                }
+                b = true;
+                lists.addAll(list);
+            }
 
             int max = 0;
             for (List<TypedSymbol> typedSymbols : lists) {

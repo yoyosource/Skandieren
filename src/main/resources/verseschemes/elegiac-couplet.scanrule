@@ -2,6 +2,14 @@
     types[[
         [LSS, LL],
         [LSS, LL],
+        [LSS, LL],
+        [LSS, LL],
+        [LSS, LL],
+        [LE]
+    ],
+    [
+        [LSS, LL],
+        [LSS, LL],
         [L],
         [LSS, LL],
         [LSS, LL],
