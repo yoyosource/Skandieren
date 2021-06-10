@@ -204,7 +204,8 @@ public class ScanRule {
             }
             Predicate<List<TypedSymbol>> finalPredicate = predicate;
             percentageRules.add(typedSymbolList -> {
-                if (finalPredicate.test(typedSymbolList.stream().filter(typedSymbol -> typedSymbol.getType() != null).collect(Collectors.toList()))) {
+                List<TypedSymbol> typedSymbols = typedSymbolList.stream().filter(t -> !t.getSymbol().ignored()).filter(t -> t.getType() != null).collect(Collectors.toList());
+                if (finalPredicate.test(typedSymbols)) {
                     return points;
                 }
                 return 0;
@@ -257,9 +258,10 @@ public class ScanRule {
             }
             BiPredicate<Integer, List<TypedSymbol>> finalPredicate1 = predicate;
             percentageRules.add(typedSymbolList -> {
+                List<TypedSymbol> typedSymbols = typedSymbolList.stream().filter(t -> !t.getSymbol().ignored()).collect(Collectors.toList());
                 int totalPoints = 0;
-                for (int i = 0; i < typedSymbolList.size() - stringList.size(); i++) {
-                    if (finalPredicate1.test(i, typedSymbolList)) {
+                for (int i = 0; i < typedSymbols.size() - stringList.size(); i++) {
+                    if (finalPredicate1.test(i, typedSymbols)) {
                         totalPoints += points;
                     }
                 }

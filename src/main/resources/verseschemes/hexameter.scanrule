@@ -209,6 +209,54 @@
                     MUTA,
                     s,
                 ]
+            },
+            {
+                points(8)
+                [
+                    b,
+                    a: LONG,
+                    m,
+                    u,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(8)
+                [
+                    b,
+                    a: LONG,
+                    t,
+                    i,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(7)
+                [
+                    i,
+                    s,
+                    t,
+                    i: LONG,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    NON_VOCAL,
+                    SPACE,
+                    NON_VOCAL,
+                ]
+            },
+            {
+                points(-5)
+                [
+                    h,
+                    SPACE,
+                    NON_VOCAL,
+                ]
             }
         ]
     }
