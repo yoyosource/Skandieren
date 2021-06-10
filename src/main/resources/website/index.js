@@ -11,6 +11,11 @@ function getInputValue(event) {
     let response = readData("/api/scansion", { "text": input, "ruleset": ruleset });
         response.then(result => {
             console.log(result);
+            if (result?.["unknown-author"]) {
+                document.getElementById("myInput").style["border-color"] = "red";
+            } else {
+                document.getElementById("myInput").style["border-color"] = "";
+            }
             display(result);
         })
         .catch(function (error) {
