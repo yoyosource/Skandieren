@@ -289,5 +289,15 @@
                 ]
             }
         ]
+        special[
+            {
+                points(1)
+                [
+                    e: REMOVED,
+                    SPACE: REMOVED,
+                    VOCAL,
+                ]
+            }
+        ]
     }
 }

@@ -162,11 +162,11 @@ public class Website {
                 if (s.equals("")) {
                     s = "standard";
                 }
-                YAPIONObject rules = new YAPIONObject();
-                // rules.add("metrical-feet", scanRule.getYapionObject().getYAPIONAnyType("metrical-feet").internalCopy());
-                rules.add("types", scanRule.getYapionObject().getYAPIONAnyType("types").internalCopy());
-                yapionObject.add(s, rules);
+                yapionObject.add(s, "");
             });
+
+            response.status(200);
+            response.type("application/json");
             return yapionObject.toJSONLossy(new StringOutput()).getResult();
         });
 

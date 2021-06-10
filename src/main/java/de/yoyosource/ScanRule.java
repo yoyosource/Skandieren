@@ -14,7 +14,6 @@ import yapion.hierarchy.types.YAPIONObject;
 import yapion.hierarchy.types.YAPIONValue;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -88,6 +87,9 @@ public class ScanRule {
             }
             if (current.containsKey("char")) {
                 generateCharPercentages(current.getArray("char"));
+            }
+            if (current.containsKey("special")) {
+                generateSpecialPercentages(current.getArray("special"));
             }
         }
     }
@@ -259,6 +261,63 @@ public class ScanRule {
             BiPredicate<Integer, List<TypedSymbol>> finalPredicate1 = predicate;
             percentageRules.add(typedSymbolList -> {
                 List<TypedSymbol> typedSymbols = typedSymbolList.stream().filter(t -> !t.getSymbol().ignored()).collect(Collectors.toList());
+                int totalPoints = 0;
+                for (int i = 0; i < typedSymbols.size() - stringList.size(); i++) {
+                    if (finalPredicate1.test(i, typedSymbols)) {
+                        totalPoints += points;
+                    }
+                }
+                return totalPoints;
+            });
+        });
+    }
+
+    private void generateSpecialPercentages(YAPIONArray yapionArray) {
+        yapionArray.streamObject().forEach(yapionObject -> {
+            int points = yapionObject.getPlainValue("points");
+            BiPredicate<Integer, List<TypedSymbol>> predicate = (i, typedSymbols) -> true;
+            List<String> stringList = yapionObject.getArray("").streamValue().map(YAPIONValue::get).map(Object::toString).collect(Collectors.toList());
+            int index = 0;
+            for (String s : stringList) {
+                Predicate<TypedSymbol> typeOrModifer = typedSymbol -> true;
+                if (s.contains(":")) {
+                    String[] strings = s.split(":");
+                    if (strings.length != 2) {
+                        return;
+                    }
+                    s = strings[0].trim();
+                    String current = strings[1].trim();
+                    try {
+                        SymbolModifier symbolModifier = SymbolModifier.valueOf(current);
+                        typeOrModifer = typedSymbol -> typedSymbol.getSymbol().is(symbolModifier);
+                    } catch (Exception e) {
+                        Type type = Type.valueOf(current);
+                        typeOrModifer = typedSymbol -> typedSymbol.getType() == type;
+                    }
+                }
+
+                String currentChar = s;
+                Predicate<Character> charPredicate;
+                if (currentChar.length() == 1) {
+                    charPredicate = character -> character == currentChar.charAt(0);
+                } else {
+                    SymbolModifier symbolModifier = SymbolModifier.valueOf(currentChar);
+                    charPredicate = symbolsChecker.get(symbolModifier);
+                }
+
+                int finalIndex = index;
+                Predicate<TypedSymbol> finalTypeOrModifer = typeOrModifer;
+                predicate = predicate.and((integer, typedSymbols) -> {
+                    if (!charPredicate.test(typedSymbols.get(integer + finalIndex).getSymbol().getC())) {
+                        return false;
+                    }
+                    return finalTypeOrModifer.test(typedSymbols.get(integer + finalIndex));
+                });
+                index++;
+            }
+            BiPredicate<Integer, List<TypedSymbol>> finalPredicate1 = predicate;
+            percentageRules.add(typedSymbolList -> {
+                List<TypedSymbol> typedSymbols = typedSymbolList.stream().filter(t -> !t.getSymbol().is(SymbolModifier.IGNORED)).collect(Collectors.toList());
                 int totalPoints = 0;
                 for (int i = 0; i < typedSymbols.size() - stringList.size(); i++) {
                     if (finalPredicate1.test(i, typedSymbols)) {
