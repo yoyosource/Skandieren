@@ -136,7 +136,15 @@
             {
                 points(5)
                 [
-                    a,
+                    VOCAL: LONG,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(-2)
+                [
+                    i: LONG,
                     s,
                     SPACE,
                 ]
@@ -144,8 +152,30 @@
             {
                 points(5)
                 [
-                    i,
-                    s,
+                    a: LONG,
+                    r,
+                    u,
+                    m,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    o: LONG,
+                    r,
+                    u,
+                    m,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    e: LONG,
+                    r,
+                    u,
+                    m,
                     SPACE,
                 ]
             },
