@@ -1,9 +1,26 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.0.0'
 }
 
 group 'de.yoyosource'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+
+mainClassName = 'de.yoyosoure.web.Website'
+
+shadowJar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
 
 repositories {
     mavenCentral()
