@@ -36,16 +36,11 @@ header {
     font-size: 20px;
     margin-left: 2%;
     width: 2%;
-    border: none;
+    text-align: center;
     border-radius: 10px;
     box-shadow: 2px 2px;
     outline: none;
     float: left;
-    background-color: white;
-    font-color: black;
-    text-decoration: none;
-    text-align: center;
-    display: inline-block;
 }
 
 .input {

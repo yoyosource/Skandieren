@@ -223,6 +223,9 @@ public class Website {
             allResults.add(current);
             if (!scanRule.getPercentageRules().isEmpty()) {
                 int points = scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum();
+                if (points < 0) {
+                    points = 0;
+                }
                 current.add("percent", ((int) ((points / (double) max) * 1000)) / 10.0);
                 current.add("points", points);
             }
