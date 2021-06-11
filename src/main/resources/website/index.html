@@ -21,7 +21,9 @@
 </header>
 
 <section class="content">
-    <br><input class="input" type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input">
+    <br>
+    <input class="button disable-select" id="button" type="text" value="↓" readonly onclick="getToggleClick(event);"/>
+    <input class="input" type="text" onkeydown="getInputValue(event);" placeholder="Input verse" id="input">
     <inlineText class="ruleset">
         <form autocomplete="off" action="/">
             <div class="autocomplete">

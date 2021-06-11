@@ -198,10 +198,22 @@ public class ScanRule {
                 int index = Integer.parseInt(strings[0].trim());
                 try {
                     SymbolModifier symbolModifier = SymbolModifier.valueOf(strings[1].trim());
-                    predicate = predicate.and(typedSymbols -> typedSymbols.get(index).getSymbol().is(symbolModifier));
+                    predicate = predicate.and(typedSymbols -> {
+                        if (index >= 0) {
+                            return typedSymbols.get(index).getSymbol().is(symbolModifier);
+                        } else {
+                            return typedSymbols.get(typedSymbols.size() + index).getSymbol().is(symbolModifier);
+                        }
+                    });
                 } catch (Exception e) {
                     Type type = Type.valueOf(strings[1].trim());
-                    predicate = predicate.and(typedSymbols -> typedSymbols.get(index).getType() == type);
+                    predicate = predicate.and(typedSymbols -> {
+                        if (index >= 0) {
+                            return typedSymbols.get(index).getType() == type;
+                        } else {
+                            return typedSymbols.get(typedSymbols.size() + index).getType() == type;
+                        }
+                    });
                 }
             }
             Predicate<List<TypedSymbol>> finalPredicate = predicate;

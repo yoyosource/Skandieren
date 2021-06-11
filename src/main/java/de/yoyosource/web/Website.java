@@ -75,38 +75,27 @@ public class Website {
             System.out.println("Request: " + yapionObject);
             String text = yapionObject.getPlainValue("text");
 
-            YAPIONObject resultObject = new YAPIONObject();
             String scanRuleName = yapionObject.getPlainValueOrDefault("ruleset", "").toLowerCase();
             if (!scanRuleMap.containsKey(scanRuleName)) {
-                resultObject.add("unknown-author", scanRuleName);
                 scanRuleName = "";
             }
             ScanRule scanRule = scanRuleMap.get(scanRuleName);
 
             // Skandieren
-            YAPIONArray allResults = new YAPIONArray();
-            resultObject.add("results", allResults);
-
+            String order = yapionObject.getPlainValueOrDefault("order", "normal");
             List<Symbol> symbolList = Symbol.toSymbols(text, scanRule);
-
-            List<List<List<TypedSymbol>>> listList = new ArrayList<>();
-            Rule.apply(symbolList, scanRule).forEach(symbols -> {
-                List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
-                if (!current.isEmpty()) {
-                    current.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value)).sum()));
-                    listList.add(current);
-                }
-            });
-            listList.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value.get(0))).sum()));
-
             List<List<TypedSymbol>> lists = new ArrayList<>();
-            boolean b = false;
-            for (List<List<TypedSymbol>> list : listList) {
-                if (b) {
-                    lists.add(new ArrayList<>());
-                }
-                b = true;
-                lists.addAll(list);
+            switch (order) {
+                case "ascending":
+                    lists = ascendingScansion(symbolList, scanRule);
+                    break;
+                case "descending":
+                    lists = descendingScansion(symbolList, scanRule);
+                    break;
+                default:
+                case "normal":
+                    lists = normalScansion(symbolList, scanRule);
+                    break;
             }
 
             int max = 0;
@@ -120,41 +109,10 @@ public class Website {
                 }
             }
 
-            for (List<TypedSymbol> typedSymbols : lists) {
-                if (typedSymbols.isEmpty()) {
-                    allResults.add(new YAPIONObject());
-                    continue;
-                }
-
-                YAPIONObject current = new YAPIONObject();
-                allResults.add(current);
-                if (!scanRule.getPercentageRules().isEmpty()) {
-                    current.add("percent", "" + (int) ((scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum() / (double) max) * 100));
-                }
-
-                YAPIONArray resultText = new YAPIONArray();
-                current.add("text", resultText);
-
-                for (TypedSymbol typedSymbol : typedSymbols) {
-                    YAPIONObject typedResult = new YAPIONObject();
-                    resultText.add(typedResult);
-                    typedResult.add("char", "" + typedSymbol.getSymbol().getC());
-                    if (typedSymbol.getType() != null) {
-                        typedResult.add("over", "" + typedSymbol.getType().printChar);
-                    }
-                    if (typedSymbol.getSymbol().is(SymbolModifier.REMOVED)) {
-                        typedResult.add("removed", true);
-                        if (typedSymbol.getSymbol().getC() == ' ') {
-                            typedResult.add("under", true);
-                        }
-                    }
-                }
-            }
-
+            YAPIONObject resultObject = generateResult(lists, scanRule, max);
             response.status(200);
             response.type("application/json");
-            // response.type("application/yapion");
-            return resultObject.toJSON(new StringOutput(false)).getResult();
+            return resultObject.toJSONLossy(new StringOutput(false)).getResult();
         });
         get("/api/rulesets", (request, response) -> {
             YAPIONObject yapionObject = new YAPIONObject();
@@ -181,6 +139,102 @@ public class Website {
                 // Ignored
             }
         });
+    }
+
+    private static List<List<TypedSymbol>> normalScansion(List<Symbol> symbolList, ScanRule scanRule) {
+        List<List<List<TypedSymbol>>> listList = new ArrayList<>();
+        Rule.apply(symbolList, scanRule).forEach(symbols -> {
+            List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
+            if (!current.isEmpty()) {
+                current.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value)).sum()));
+                listList.add(current);
+            }
+        });
+        listList.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value.get(0))).sum()));
+
+        List<List<TypedSymbol>> lists = new ArrayList<>();
+        boolean b = false;
+        for (List<List<TypedSymbol>> list : listList) {
+            if (b) {
+                lists.add(new ArrayList<>());
+            }
+            b = true;
+            lists.addAll(list);
+        }
+        return lists;
+    }
+
+    private static List<List<TypedSymbol>> descendingScansion(List<Symbol> symbolList, ScanRule scanRule) {
+        List<List<List<TypedSymbol>>> listList = new ArrayList<>();
+        Rule.apply(symbolList, scanRule).forEach(symbols -> {
+            List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
+            if (!current.isEmpty()) {
+                listList.add(current);
+            }
+        });
+
+        List<List<TypedSymbol>> lists = new ArrayList<>();
+        for (List<List<TypedSymbol>> list : listList) {
+            lists.addAll(list);
+        }
+        lists.sort(Comparator.comparingInt(value -> -scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value)).sum()));
+        return lists;
+    }
+
+    private static List<List<TypedSymbol>> ascendingScansion(List<Symbol> symbolList, ScanRule scanRule) {
+        List<List<List<TypedSymbol>>> listList = new ArrayList<>();
+        Rule.apply(symbolList, scanRule).forEach(symbols -> {
+            List<List<TypedSymbol>> current = TypedSymbol.create(symbols, scanRule);
+            if (!current.isEmpty()) {
+                listList.add(current);
+            }
+        });
+
+        List<List<TypedSymbol>> lists = new ArrayList<>();
+        for (List<List<TypedSymbol>> list : listList) {
+            lists.addAll(list);
+        }
+        lists.sort(Comparator.comparingInt(value -> scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(value)).sum()));
+        return lists;
+    }
+
+    private static YAPIONObject generateResult(List<List<TypedSymbol>> lists, ScanRule scanRule, int max) {
+        YAPIONObject resultObject = new YAPIONObject();
+        YAPIONArray allResults = new YAPIONArray();
+        resultObject.add("results", allResults);
+        for (List<TypedSymbol> typedSymbols : lists) {
+            if (typedSymbols.isEmpty()) {
+                allResults.add(new YAPIONObject());
+                continue;
+            }
+
+            YAPIONObject current = new YAPIONObject();
+            allResults.add(current);
+            if (!scanRule.getPercentageRules().isEmpty()) {
+                int points = scanRule.getPercentageRules().stream().mapToInt(percentage -> percentage.points(typedSymbols)).sum();
+                current.add("percent", ((int) ((points / (double) max) * 1000)) / 10.0);
+                current.add("points", points);
+            }
+
+            YAPIONArray resultText = new YAPIONArray();
+            current.add("text", resultText);
+
+            for (TypedSymbol typedSymbol : typedSymbols) {
+                YAPIONObject typedResult = new YAPIONObject();
+                resultText.add(typedResult);
+                typedResult.add("char", "" + typedSymbol.getSymbol().getC());
+                if (typedSymbol.getType() != null) {
+                    typedResult.add("over", "" + typedSymbol.getType().printChar);
+                }
+                if (typedSymbol.getSymbol().is(SymbolModifier.REMOVED)) {
+                    typedResult.add("removed", true);
+                    if (typedSymbol.getSymbol().getC() == ' ') {
+                        typedResult.add("under", true);
+                    }
+                }
+            }
+        }
+        return resultObject;
     }
 
 }

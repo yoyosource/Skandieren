@@ -3,19 +3,41 @@ function getInputValue(event) {
         return;
     }
     event.preventDefault();
+    scansion();
+}
+
+function getToggleClick(event) {
+    let input = document.getElementById("button").value;
+    if (input == '↓') {
+        document.getElementById("button").value = '-';
+    } else if (input == '-') {
+        document.getElementById("button").value = '↑';
+    } else {
+        document.getElementById("button").value = '↓';
+    }
+    scansion();
+}
+
+function getOrder() {
+    let input = document.getElementById("button").value;
+    if (input == '↑') {
+        return "ascending";
+    } else if (input == '-') {
+        return "normal";
+    } else {
+        return "descending";
+    }
+}
+
+function scansion() {
     let input = document.getElementById("input").value;
     // alert(inputValue);
 
     let ruleset = document.getElementById("myInput").value;
 
-    let response = readData("/api/scansion", { "text": input, "ruleset": ruleset });
+    let response = readData("/api/scansion", { "text": input, "ruleset": ruleset, "order": getOrder() });
         response.then(result => {
             console.log(result);
-            if (result?.["unknown-author"]) {
-                document.getElementById("myInput").style["border-color"] = "red";
-            } else {
-                document.getElementById("myInput").style["border-color"] = "";
-            }
             display(result);
         })
         .catch(function (error) {

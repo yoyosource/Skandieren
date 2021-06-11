@@ -61,7 +61,7 @@ function autocomplete(inp, arr) {
           /*and simulate a click on the "active" item:*/
           if (x) {
             x[currentFocus].click();
-            getInputValue(e);
+            scansion();
           }
         }
       }
