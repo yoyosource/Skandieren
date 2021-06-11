@@ -15,13 +15,18 @@ import yapion.parser.YAPIONParser;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static spark.Spark.*;
 
 public class Website {
 
+    private static Map<YAPIONObject, YAPIONObject> requestMap = new LinkedHashMap<YAPIONObject, YAPIONObject>() {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<YAPIONObject, YAPIONObject> eldest) {
+            return size() > 128;
+        }
+    };
     private static Map<String, ScanRule> scanRuleMap = new HashMap<>();
 
     static {
@@ -72,6 +77,11 @@ public class Website {
         post("/api/scansion", (request, response) -> {
             // Parsing request
             YAPIONObject yapionObject = YAPIONParser.parse(request.body());
+            if (requestMap.containsKey(yapionObject)) {
+                response.status(200);
+                response.type("application/json");
+                return requestMap.get(yapionObject).toJSONLossy(new StringOutput(false)).getResult();
+            }
             System.out.println("Request: " + yapionObject);
             String text = yapionObject.getPlainValue("text");
 
@@ -110,6 +120,7 @@ public class Website {
             }
 
             YAPIONObject resultObject = generateResult(lists, scanRule, max);
+            requestMap.put(yapionObject, resultObject);
             response.status(200);
             response.type("application/json");
             return resultObject.toJSONLossy(new StringOutput(false)).getResult();
