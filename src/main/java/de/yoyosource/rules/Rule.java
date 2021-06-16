@@ -2,7 +2,7 @@ package de.yoyosource.rules;
 
 import de.yoyosource.ScanRule;
 import de.yoyosource.symbols.Symbol;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @ToString
 public class Rule {
     private final RuleComponent[] ruleComponents;
