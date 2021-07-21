@@ -1,3 +1,22 @@
+/*
+ * This file is a part of the Skandieren software.
+ *
+ * Copyright (C) 2020  YoyoSource
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package de.yoyosource.web;
 
 import de.yoyosource.ScanRule;
@@ -31,7 +50,7 @@ public class Website {
 
     static {
         YAPIONArray yapionArray = new YAPIONParser(Website.class.getResourceAsStream("/verseschemes.yapion"), true).parse().resultArray();
-        yapionArray.streamValue().map(yapionValue -> (YAPIONValue<String>) yapionValue).map(YAPIONValue::get).forEach(name -> {
+        yapionArray.stream().filter(yapionAnyType -> YAPIONValue.class.isAssignableFrom(yapionAnyType.getClass())).map(YAPIONValue.class::cast).map(yapionValue -> (YAPIONValue<String>) yapionValue).map(YAPIONValue::get).forEach(name -> {
             try {
                 ScanRule scanRule = new ScanRule(YAPIONParser.parse(Website.class.getResourceAsStream("/verseschemes/" + name)));
                 if (!name.startsWith("standard")) {
