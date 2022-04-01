@@ -1,0 +1,311 @@
+{
+    types[[
+        [LSS, LL],
+        [LSS, LL],
+        [LSS, LL],
+        [LSS, LL],
+        [LSS],
+        [LE]
+    ],
+    [
+        [LSS, LL],
+        [LSS, LL],
+        [L],
+        [LSS],
+        [LSS],
+        [L]
+    ]]
+    symbols{
+        muta(bptdgc)
+        liquida(lrs)
+        vocal(aeiouy)
+        non_vocal(bcdfghjklmnpqrstvwxyz)
+        special(.,"-?!:;\(\)_)
+        space( \t)
+    }
+    rules-always[
+        [
+            q > retain,
+            u > removed,
+        ],
+        [
+            p > retain,
+            h > removed,
+        ],
+        [
+            t > retain,
+            h > removed,
+        ],
+        [
+            e > retain,
+            s > ignored,
+            t > retain,
+        ],
+        [
+            vocal > long,
+            non_vocal | muta > retain,
+            non_vocal | liquida\, q > retain,
+        ],
+        [
+            special > ignored,
+        ]
+    ]
+    rules-sometimes[
+        [
+            vocal > long,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            v > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > retain,
+            h > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > long,
+            space > removed,
+            m > retain,
+            vocal > removed,
+        ],
+        [
+            vocal > removed,
+            space > removed,
+            h > removed,
+            vocal > retain,
+        ],
+        [
+            u > long,
+            m > retain,
+            space > removed,
+            e > removed,
+            s > retain,
+            t > retain,
+        ],
+        [
+            non_vocal > retain,
+            h > removed,
+            vocal > retain,
+        ],
+        [
+            e > removed,
+            space > removed,
+            vocal > retain,
+        ]
+    ]
+    percentages{
+        vocal[
+            {
+                points(10)
+                [
+                    2: S,
+                ]
+            }
+        ]
+        char[
+            {
+                points(9)
+                [
+                    VOCAL,
+                    SPACE,
+                    e: L,
+                    s,
+                    t,
+                ]
+            },
+            {
+                points(9)
+                [
+                    VOCAL,
+                    SPACE,
+                    e: L,
+                    s,
+                ]
+            },
+            {
+                points(9)
+                [
+                    VOCAL,
+                    SPACE,
+                    e: L,
+                    s,
+                    s,
+                    e,
+                ]
+            },
+            {
+                points(5)
+                [
+                    VOCAL: LONG,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(-2)
+                [
+                    i: LONG,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    a: LONG,
+                    r,
+                    u,
+                    m,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    o: LONG,
+                    r,
+                    u,
+                    m,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    e: LONG,
+                    r,
+                    u,
+                    m,
+                    SPACE,
+                ]
+            },
+            {
+                points(6)
+                [
+                    i,
+                    e,
+                ]
+            },
+            {
+                points(6)
+                [
+                    e,
+                    i,
+                ]
+            },
+            {
+                points(8)
+                [
+                    VOCAL,
+                    SPACE,
+                    i,
+                ]
+            },
+            {
+                points(4)
+                [
+                    VOCAL: S,
+                    VOCAL,
+                ]
+            },
+            {
+                points(1)
+                [
+                    VOCAL,
+                    NON_VOCAL,
+                    NON_VOCAL,
+                ]
+            }
+            {
+                points(-3)
+                [
+                    VOCAL,
+                    h,
+                    SPACE: REMOVED,
+                ]
+            },
+            {
+                points(-3)
+                [
+                    VOCAL,
+                    v,
+                    SPACE: REMOVED,
+                ]
+            },
+            {
+                points(-3)
+                [
+                    VOCAL,
+                    MUTA,
+                    s,
+                ]
+            },
+            {
+                points(8)
+                [
+                    b,
+                    a: LONG,
+                    m,
+                    u,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(8)
+                [
+                    b,
+                    a: LONG,
+                    t,
+                    i,
+                    s,
+                    SPACE,
+                ]
+            },
+            {
+                points(7)
+                [
+                    i,
+                    s,
+                    t,
+                    i: LONG,
+                    SPACE,
+                ]
+            },
+            {
+                points(5)
+                [
+                    NON_VOCAL,
+                    SPACE,
+                    NON_VOCAL,
+                ]
+            },
+            {
+                points(-5)
+                [
+                    h,
+                    SPACE,
+                    NON_VOCAL,
+                ]
+            }
+        ]
+        special[
+            {
+                points(1)
+                [
+                    e: REMOVED,
+                    SPACE: REMOVED,
+                    VOCAL,
+                ]
+            }
+        ]
+    }
+}

@@ -47,6 +47,7 @@ public class ScanRule {
     private List<Rule> alwaysRules = new ArrayList<>();
     private List<Rule> sometimesRules = new ArrayList<>();
     private List<Percentage> percentageRules = new ArrayList<>();
+    private List<Integer> positionalLongs = new ArrayList<>();
 
     public ScanRule(YAPIONObject yapionObject) {
         this.yapionObject = yapionObject;
@@ -110,6 +111,16 @@ public class ScanRule {
             if (current.containsKey("special")) {
                 generateSpecialPercentages(current.getArray("special"));
             }
+            if (current.containsKey("types")) {
+                generateTypePercentages(current.getArray("types"));
+            }
+        }
+
+        if (yapionObject.containsKey("positional-longs")) {
+            YAPIONArray current = yapionObject.getArray("positional-longs");
+            current.forEach(yapionAnyType -> {
+                positionalLongs.add(((YAPIONValue<Integer>) yapionAnyType).get());
+            });
         }
     }
 
@@ -360,4 +371,14 @@ public class ScanRule {
         });
     }
 
+    private void generateTypePercentages(YAPIONArray yapionArray) {
+        yapionArray.streamObject().forEach(yapionObject -> {
+            int points = yapionObject.getPlainValue("points");
+            String typeString = yapionObject.getPlainValue("type");
+            Type type = Type.valueOf(typeString);
+            percentageRules.add(typedSymbolList -> {
+                return typedSymbolList.stream().filter(t -> t.getType() == type).mapToInt(t -> points).sum();
+            });
+        });
+    }
 }

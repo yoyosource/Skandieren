@@ -24,6 +24,7 @@ import de.yoyosource.rules.Rule;
 import de.yoyosource.symbols.Symbol;
 import de.yoyosource.symbols.SymbolModifier;
 import de.yoyosource.symbols.TypedSymbol;
+import de.yoyosource.types.Type;
 import yapion.exceptions.YAPIONException;
 import yapion.hierarchy.output.StringOutput;
 import yapion.hierarchy.types.YAPIONArray;
@@ -113,7 +114,8 @@ public class Website {
             // Skandieren
             String order = yapionObject.getPlainValueOrDefault("order", "normal");
             List<Symbol> symbolList = Symbol.toSymbols(text, scanRule);
-            List<List<TypedSymbol>> lists = new ArrayList<>();
+            List<List<TypedSymbol>> lists;
+
             switch (order) {
                 case "ascending":
                     lists = ascendingScansion(symbolList, scanRule);
@@ -126,6 +128,30 @@ public class Website {
                     lists = normalScansion(symbolList, scanRule);
                     break;
             }
+
+            List<List<TypedSymbol>> result = new ArrayList<>();
+            if (!scanRule.getPositionalLongs().isEmpty()) {
+                for (List<TypedSymbol> list : lists) {
+                    List<TypedSymbol> typedSymbols = list.stream().filter(symbol -> symbol.getType() != null).collect(Collectors.toList());
+                    boolean invalid = false;
+                    for (int i = 0; i < typedSymbols.size(); i++) {
+                        TypedSymbol typedSymbol = typedSymbols.get(i);
+                        if (scanRule.getPositionalLongs().contains(i)) {
+                            if (typedSymbol.getType() != Type.L) {
+                                invalid = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (invalid) {
+                        continue;
+                    }
+                    result.add(list);
+                }
+            } else {
+                result = lists;
+            }
+            lists = result;
 
             int max = 0;
             for (List<TypedSymbol> typedSymbols : lists) {

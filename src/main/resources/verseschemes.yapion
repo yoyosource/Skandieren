@@ -9,6 +9,7 @@
     choliambus.scanrule,
     di-iamb.scanrule,
     elegiac-couplet.scanrule,
+    ovid/ars-amatoria.scanrule,
     glyconeus.scanrule,
     hexameter.scanrule,
     pentameter.scanrule,
