@@ -278,11 +278,20 @@ public class Website {
             YAPIONArray resultText = new YAPIONArray();
             current.add("text", resultText);
 
+            boolean lastLong = false;
+            int currentLong = 0;
+            List<YAPIONObject> optionalCaesura = new ArrayList<>();
             for (TypedSymbol typedSymbol : typedSymbols) {
                 YAPIONObject typedResult = new YAPIONObject();
                 resultText.add(typedResult);
                 typedResult.add("char", "" + typedSymbol.getSymbol().getC());
                 if (typedSymbol.getType() != null) {
+                    if (typedSymbol.getType() == Type.L && !lastLong) {
+                        currentLong++;
+                        lastLong = true;
+                    } else {
+                        lastLong = false;
+                    }
                     typedResult.add("over", "" + typedSymbol.getType().printChar);
                 }
                 if (typedSymbol.getSymbol().is(SymbolModifier.REMOVED)) {
@@ -290,7 +299,16 @@ public class Website {
                     if (typedSymbol.getSymbol().getC() == ' ') {
                         typedResult.add("under", true);
                     }
+                } else if (typedSymbol.getSymbol().getC() == ' ' && lastLong && scanRule.getCaesuraPositions().contains(currentLong)) {
+                    typedResult.add("over", "'");
+                } else if (typedSymbol.getSymbol().getC() == ' ' && lastLong && scanRule.getOptionalCaesuraPositions.contains(currentLong)) {
+                    optionalCaesura.add(typedResult);
                 }
+            }
+            if (optionalCaesura.size() > 1) {
+                optionalCaesura.forEach(yapionAnyTypes -> {
+                    yapionAnyTypes.add("over", "'");
+                });
             }
         }
         return resultObject;

@@ -48,6 +48,8 @@ public class ScanRule {
     private List<Rule> sometimesRules = new ArrayList<>();
     private List<Percentage> percentageRules = new ArrayList<>();
     private List<Integer> positionalLongs = new ArrayList<>();
+    private Set<Integer> caesuraPositions = new HashSet<>();
+    private Set<Integer> optionalCaesuraPositions = new HashSet<>();
 
     public ScanRule(YAPIONObject yapionObject) {
         this.yapionObject = yapionObject;
@@ -120,6 +122,20 @@ public class ScanRule {
             YAPIONArray current = yapionObject.getArray("positional-longs");
             current.forEach(yapionAnyType -> {
                 positionalLongs.add(((YAPIONValue<Integer>) yapionAnyType).get());
+            });
+        }
+
+        if (yapionObject.containsKey("caesura-positions")) {
+            YAPIONArray current = yapionObject.getArray("caesura-positions");
+            current.forEach(yapionAnyType -> {
+                caesuraPositions.add(((YAPIONValue<Integer>) yapionAnyType).get());
+            });
+        }
+
+        if (yapionObject.containsKey("optional-caesura-positions")) {
+            YAPIONArray current = yapionObject.getArray("optional-caesura-positions");
+            current.forEach(yapionAnyType -> {
+                optionalCaesuraPositions.add(((YAPIONValue<Integer>) yapionAnyType).get());
             });
         }
     }

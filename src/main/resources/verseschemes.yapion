@@ -13,6 +13,7 @@
     glyconeus.scanrule,
     hexameter.scanrule,
     pentameter.scanrule,
+    pentameter-2.scanrule,
     phalaeceus.scanrule,
     pherecrateus.scanrule,
     sapphic.scanrule,

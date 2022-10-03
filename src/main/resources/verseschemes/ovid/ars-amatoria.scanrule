@@ -23,6 +23,8 @@
         special(.,"-?!:;\(\)_)
         space( \t)
     }
+    caesura-positions[3]
+    optional-caesura-positions[2, 4]
     rules-always[
         [
             q > retain,
