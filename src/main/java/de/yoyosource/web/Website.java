@@ -301,7 +301,7 @@ public class Website {
                     }
                 } else if (typedSymbol.getSymbol().getC() == ' ' && lastLong && scanRule.getCaesuraPositions().contains(currentLong)) {
                     typedResult.add("over", "'");
-                } else if (typedSymbol.getSymbol().getC() == ' ' && lastLong && scanRule.getOptionalCaesuraPositions.contains(currentLong)) {
+                } else if (typedSymbol.getSymbol().getC() == ' ' && lastLong && scanRule.getOptionalCaesuraPositions().contains(currentLong)) {
                     optionalCaesura.add(typedResult);
                 }
             }
